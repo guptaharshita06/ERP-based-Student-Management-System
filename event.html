@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Portal - Events</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Reset */
+* {margin:0; padding:0; box-sizing:border-box;}
+body {font-family:'Inter', sans-serif; line-height:1.6; background:#f3f4f6; color:#2c3e50; overflow-x:hidden;}
+
+/* Header */
+header{position:fixed; top:0; width:100%; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.08); z-index:1000;}
+.nav-container{max-width:1200px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem;}
+.logo{font-family:'Playfair Display', serif; font-size:1.8rem; color:#3498db; font-weight:700;}
+.logo i{margin-right:0.5rem;}
+.nav-menu{display:flex; gap:2rem;}
+.nav-menu a{color:#6c757d; text-decoration:none; font-weight:500; transition:0.3s;}
+.nav-menu a:hover, .nav-menu a.active{color:#3498db;}
+.login-btn{background:#3498db; color:#fff; padding:0.6rem 1.2rem; border-radius:8px; font-weight:600; transition:0.3s;}
+.login-btn:hover{background:#2980b9;}
+
+/* Hamburger for mobile */
+.hamburger{display:none; flex-direction:column; gap:5px; cursor:pointer;}
+.hamburger span{width:25px; height:3px; background:#2c3e50; border-radius:3px; transition:0.3s;}
+.nav-menu.active{display:flex; flex-direction:column; gap:1rem; background:#fff; position:absolute; top:70px; right:20px; padding:1rem 2rem; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+
+/* Main */
+.main-content{max-width:1200px; margin:120px auto 60px auto; padding:0 2rem;}
+.page-title{text-align:center; font-family:'Playfair Display', serif; font-size:3rem; color:#3498db; margin-bottom:2rem;}
+
+/* Event Section */
+.event-section{display:flex; align-items:center; justify-content:space-between; gap:2rem; margin-bottom:4rem; flex-wrap:wrap; opacity:0; transform:translateY(30px); transition:all 0.8s ease;}
+.event-section.reverse{flex-direction:row-reverse;}
+.event-section.show{opacity:1; transform:translateY(0);}
+.event-img{flex:1; min-width:280px; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.12); transition:transform 0.3s, box-shadow 0.3s;}
+.event-img img{width:100%; display:block; height:100%; object-fit:cover;}
+.event-img:hover{transform:scale(1.05); box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+.event-content{flex:1; min-width:300px;}
+.event-content h3{font-family:'Playfair Display', serif; font-size:2rem; color:#2c3e50; margin-bottom:1rem;}
+.event-content p{font-size:1.1rem; color:#555; line-height:1.6; margin-bottom:1.2rem;}
+.event-content a{padding:0.6rem 1.2rem; background:#3498db; color:#fff; border-radius:8px; font-weight:500; text-decoration:none; transition:0.3s;}
+.event-content a:hover{background:#2980b9; transform:translateY(-2px);}
+
+/* Footer (previous style) */
+.footer {background:#2c3e50; color:white; padding:2.5rem 2rem; margin-top:3rem;}
+.footer-container {max-width:1200px; margin:auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem;}
+.footer h3 {margin-bottom:1rem; font-size:1.2rem;}
+.footer p, .footer a {color:#ddd; font-size:0.95rem; line-height:1.6; text-decoration:none;}
+.footer a:hover {color:#3498db;}
+.footer-social {display:flex; gap:1rem; margin-top:1rem;}
+.footer-social a {color:white; font-size:1.8rem; transition:0.3s;}
+.footer-social a:hover {color:#3498db; transform:scale(1.2);}
+.footer-bottom {text-align:center; margin-top:2rem; font-size:0.9rem; color:#ccc;}
+
+/* Responsive */
+@media(max-width:1024px){.event-section{flex-direction:column;} .event-section.reverse{flex-direction:column;} .event-img,.event-content{width:100%; text-align:center;}}
+@media(max-width:768px){.nav-menu{display:none;} .hamburger{display:flex;} .page-title{font-size:2.2rem;} .event-content h3{font-size:1.6rem;} .event-content p{font-size:1rem;}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="nav-container">
+    <div class="logo"><i class="fas fa-graduation-cap"></i> College Portal</div>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="academics.html">Academics</a></li>
+        <li><a href="events.html" class="active">Events</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="login.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<main class="main-content">
+  <h1 class="page-title">College Events</h1>
+
+  <section class="event-section" data-aos="fade-up">
+    <div class="event-img"><img src="sih.jpg" alt="Hackathon"></div>
+    <div class="event-content">
+      <h3>Hackathon</h3>
+      <p>Innovate, code, and compete in our annual hackathon event for all tech enthusiasts.Smart India Hackathon is a nationwide initiative that brings together students, innovators, and problem-solvers to develop tech-based solutions for real-world challenges posed by government and industry, fostering innovation, collaboration, and practical problem-solving skills."</p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+  <section class="event-section reverse" data-aos="fade-up">
+    <div class="event-img"><img src="ren.jpg" alt="Renaissance"></div>
+    <div class="event-content">
+      <h3>Renaissance</h3>
+      <p>Celebrate culture, arts, and creativity across the campus with performances and exhibitions.
+        "JECRC Renaissance is our annual cultural and technical extravaganza, where students showcase their talents in arts, music, dance, and innovation, celebrating creativity and teamwork."
+      </p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+  <section class="event-section" data-aos="fade-up">
+    <div class="event-img"><img src="fresher.webp" alt="Fresher Party"></div>
+    <div class="event-content">
+      <h3>Fresher's Party</h3>
+      <p>Welcome the new batch with fun games, music, and exciting activities on campus.The Fresher’s Party welcomes new students to the JECRC family with music, dance, games, and performances, helping them bond with seniors and start their college journey with joy</p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+  <section class="event-section reverse" data-aos="fade-up">
+    <div class="event-img"><img src="navrang.webp" alt="Navrang"></div>
+    <div class="event-content">
+      <h3>Navrang</h3>
+      <p>"Navrang is JECRC’s vibrant annual cultural festival that celebrates art, music, dance, and creativity. It brings together students from across the college to showcase their talents in various competitions, performances, and exhibitions. With colorful decor, energetic performances, and a festive atmosphere, Navrang is a celebration of youth, talent, and togetherness. From dance and drama to fashion shows and musical nights, the festival creates unforgettable memories and strengthens the spirit of community on campus."</p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+  <section class="event-section" data-aos="fade-up">
+    <div class="event-img"><img src="halloween.avif" alt="Halloween"></div>
+    <div class="event-content">
+      <h3>Halloween</h3>
+      <p>A spooky celebration full of costumes, fun, and exciting Halloween activities.The Halloween Party at JECRC brings spookiness and fun together, with costumes, games, and themed activities that let students enjoy a memorable night of frights and laughter.</p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+    <section class="event-section reverse" data-aos="fade-up">
+    <div class="event-img"><img src="mun.webp" alt="Navrang"></div>
+    <div class="event-content">
+      <h3>JECRC MUN</h3>
+      <p>JECRC MUN is a platform for students to debate, deliberate, and understand global issues, fostering diplomacy, leadership, and public speaking skills."</p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+  
+    <section class="event-section" data-aos="fade-up">
+    <div class="event-img"><img src="zarurat.png" alt="Navrang"></div>
+    <div class="event-content">
+      <h3>THE JOY OG GIVING WEEK</h3>
+      <p>"During the Joy of Giving Week, JECRC students contribute to society by supporting underprivileged children through donations, mentorship, and fun activities, spreading smiles and hope."</p>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div>
+      <h3>About College</h3>
+      <p>Our college provides world-class education and facilities to foster learning, research, and innovation.</p>
+    </div>
+    <div>
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a><br>
+      <a href="about.html">About</a><br>
+      <a href="academics.html">Academics</a><br>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div>
+      <h3>Follow Us</h3>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2025 College Portal. All Rights Reserved.</div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:1000, once:true});
+function toggleMenu(){document.querySelector('.nav-menu').classList.toggle('active');}
+
+const eventSections = document.querySelectorAll('.event-section');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting) entry.target.classList.add('show');
+  });
+},{threshold:0.3});
+eventSections.forEach(section=>observer.observe(section));
+</script>
+</body>
+</html>
