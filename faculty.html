@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Faculty Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card: #fff;
+  --muted: #6c757d;
+  --text: #2c3e50;
+  --primary: #3498db;
+}
+* { box-sizing: border-box; margin: 0; padding: 0 }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh }
+
+/* Topbar */
+.topbar {
+  height: 64px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700 }
+.brand i { color: var(--primary) }
+.menu-toggle {
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 12px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 64px; 
+  left: 0;
+  width: 70px;
+  height: calc(100vh - 64px);
+  background: var(--card);
+  border-right: 1px solid #e9ecef;
+  border-radius: 0 12px 12px 0;
+  padding: 12px;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  z-index: 40;
+}
+.sidebar.open { width: 260px; }
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-link i { font-size: 18px; }
+.nav-link span { display: none; }
+.sidebar.open .nav-link span { display: inline; }
+
+.nav-link.active { background: #eaf6ff; color: var(--primary); font-weight: 600 }
+.nav-link:hover { background: #f1f7fb }
+
+/* Main */
+.main { flex: 1; margin-left: 70px; transition: margin-left 0.3s ease; }
+.sidebar.open ~ .main { margin-left: 260px; }
+
+.grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 18px }
+.card { background: var(--card); padding: 18px; border-radius: 12px; border: 1px solid #e9ecef }
+.card h4 { font-size: 14px; color: var(--muted); margin-bottom: 10px }
+.metric { font-size: 28px; font-weight: 700 }
+
+.section { display: flex; gap: 18px }
+.wide { flex: 2 }
+.narrow { flex: 1 }
+
+.class-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #f0f3f5;
+  margin-bottom: 8px;
+}
+.btn { background: var(--primary); color: #fff; padding: 8px 10px; border-radius: 8px; text-decoration: none }
+.btn-ghost { background: transparent; border: 1px solid #e9ecef; padding: 8px 10px; border-radius: 8px }
+
+/* Modal */
+.modal {
+  position: fixed; inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  z-index: 2000;
+}
+.modal.active { display: flex }
+.modal-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive */
+@media (max-width:1000px){
+  .main { margin-left: 0; }
+  .sidebar { display: none; }
+  .sidebar.open { display: block; }
+}
+@media (max-width:640px){ .grid { grid-template-columns: 1fr } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <i class="fas fa-bars menu-toggle" onclick="toggleSidebar()"></i>
+    <div class="brand"><i class="fas fa-chalkboard"></i> Faculty Portal</div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <input placeholder="Search students or classes" style="padding:8px 10px;border-radius:8px;border:1px solid #e9ecef"/>
+    <div class="avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff">F</div>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <nav>
+    <a class="nav-link active" href="faculty.html"><i class="fas fa-home"></i><span> Dashboard</span></a>
+    <a class="nav-link" href="faculty-dashboard-class.html"><i class="fas fa-calendar"></i><span> My Classes</span></a>
+    <a class="nav-link" href="faculty-dashboard-grading.html"><i class="fas fa-clipboard-check"></i><span> Grading</span></a>
+    <a class="nav-link" href="faculty-student-attendence.html"><i class="fas fa-user-check"></i><span> Attendance</span></a>
+    <a class="nav-link" href="faculty-dashboard-assignments.html"><i class="fas fa-user-check"></i><span> Assignment</span></a>
+
+  </nav>
+</aside>
+
+<div class="layout">
+  <main class="main">
+    <section class="grid">
+      <div class="card"><h4>Classes Today</h4><div class="metric">2</div></div>
+      <div class="card"><h4>Pending Grading</h4><div class="metric">18</div></div>
+      <div class="card"><h4>Messages</h4><div class="metric">3</div></div>
+    </section>
+
+    <section class="section">
+      <div class="wide">
+        <div class="card">
+          <h4>Upcoming Class</h4>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">Algorithms - 2nd Year</div>
+              <div style="color:var(--muted)">Starts in 30 minutes • Room A102</div>
+            </div>
+            <div style="display:flex;gap:8px"><a class="btn" href="#">Start Class</a><a class="btn-ghost" href="#">Roster</a></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h4>Grading Queue</h4>
+          <div class="class-row"><div><strong>Math 101 - Homework 5</strong><div style="color:var(--muted);font-size:13px">25 submissions</div></div><div><a class="btn" href="#" data-assignment="Math 101 - Homework 5" onclick="openGrading(event)">Grade</a></div></div>
+          <div class="class-row"><div><strong>Physics Lab</strong><div style="color:var(--muted);font-size:13px">12 submissions</div></div><div><a class="btn" href="#" data-assignment="Physics Lab" onclick="openGrading(event)">Grade</a></div></div>
+          <div class="class-row"><div><strong>CS Project</strong><div style="color:var(--muted);font-size:13px">6 submissions</div></div><div><a class="btn" href="#" data-assignment="CS Project" onclick="openGrading(event)">Grade</a></div></div>
+        </div>
+      </div>
+
+      <aside class="narrow">
+        <div class="card">
+          <h4>Quick Actions</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <a class="nav-link" href="#">Create Assignment</a>
+            <a class="nav-link" href="#">Upload Resource</a>
+            <a class="nav-link" href="#">Send Announcement</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h4>Recent Messages</h4>
+          <div style="color:var(--muted)">You have 3 unread messages</div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- Modal -->
+<div id="gradeModal" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <h3 id="gradeTitle">Grade Submissions</h3>
+    <div style="margin-top:8px;color:var(--muted);font-size:13px" id="gradeInfo">Loading...</div>
+    <div style="margin-top:12px">
+      <label style="display:block;margin-bottom:6px">Sample student</label>
+      <input id="gradeInput" type="text" placeholder="Enter grade or comments" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e9ecef" />
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button class="btn-ghost" onclick="closeGrading()">Cancel</button><button class="btn" onclick="submitGrade()">Submit</button></div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function openGrading(e){
+  e.preventDefault();
+  const a = e.currentTarget.getAttribute('data-assignment');
+  document.getElementById('gradeTitle').textContent = 'Grading — ' + a;
+  document.getElementById('gradeInfo').textContent = 'Ready to grade the latest submissions for: ' + a;
+  document.getElementById('gradeModal').classList.add('active');
+}
+function closeGrading(){
+  document.getElementById('gradeModal').classList.remove('active');
+}
+function submitGrade(){
+  alert('Grade submitted (demo)');
+  closeGrading();
+}
+document.querySelectorAll('.nav-link').forEach(a=>a.addEventListener('click',e=>{
+  document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
+  e.currentTarget.classList.add('active')
+}))
+</script>
+</body>
+</html>
