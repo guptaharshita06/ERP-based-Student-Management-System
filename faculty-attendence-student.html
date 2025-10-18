@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Faculty - Student Attendance</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+   :root {
+  --bg: #f8f9fa;
+  --card: #fff;
+  --muted: #6c757d;
+  --text: #2c3e50;
+  --primary: #3498db;
+}
+* { box-sizing: border-box; margin: 0; padding: 0 }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh }
+
+/* Topbar */
+.topbar {
+  height: 64px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700 }
+.brand i { color: var(--primary) }
+.menu-toggle {
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 12px;
+}
+    .container{max-width:1200px;margin:20px auto;padding:0 20px}
+    .card{background:var(--card);padding:18px;border-radius:12px;border:1px solid #e9ecef;margin-top:18px}
+
+    .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    select,input[type=date]{padding:8px;border-radius:8px;border:1px solid #e9ecef}
+    .btn{background:var(--primary);color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;border:none;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid #e9ecef;padding:8px 10px;border-radius:8px}
+
+    .roster{margin-top:14px}
+    .student-row{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;border:1px solid #f0f3f5;margin-bottom:8px}
+    .student-left{display:flex;align-items:center;gap:12px}
+    .avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary),#2a8acc);color:#fff;font-weight:700}
+    .status-controls{display:flex;gap:8px}
+  .status-btn{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:none;cursor:pointer;opacity:0.45;transition:all 0.14s ease}
+  .status-btn.active{opacity:1;box-shadow:0 6px 18px rgba(33,125,187,0.12);transform:translateY(-2px)}
+  .present{background:#eaf6ff;color:#27ae60}
+  .absent{background:#fff0f0;color:#e74c3c}
+  .tardy{background:#fff8e6;color:#856404}
+
+    .small{font-size:13px;color:var(--muted)}
+
+    @media (max-width:700px){.student-row{flex-direction:column;align-items:flex-start}.status-controls{margin-top:8px}}
+    /* Layout */
+.layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 12px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 64px; 
+  left: 0;
+  width: 70px;
+  height: calc(100vh - 64px);
+  background: var(--card);
+  border-right: 1px solid #e9ecef;
+  border-radius: 0 12px 12px 0;
+  padding: 12px;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  z-index: 40;
+}
+.sidebar.open { width: 260px; }
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-link i { font-size: 18px; }
+.nav-link span { display: none; }
+.sidebar.open .nav-link span { display: inline; }
+
+.nav-link.active { background: #eaf6ff; color: var(--primary); font-weight: 600 }
+.nav-link:hover { background: #f1f7fb }
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <i class="fas fa-bars menu-toggle" onclick="toggleSidebar()"></i>
+    <div class="brand"><i class="fas fa-chalkboard"></i> Faculty Portal</div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <input placeholder="Search students or classes" style="padding:8px 10px;border-radius:8px;border:1px solid #e9ecef"/>
+    <div class="avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff">F</div>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <nav>
+    <a class="nav-link" href="faculty.html"><i class="fas fa-home"></i><span> Dashboard</span></a>
+    <a class="nav-link" href="faculty-dashboard-class.html"><i class="fas fa-calendar"></i><span> My Classes</span></a>
+    <a class="nav-link" href="faculty-dashboard-grading.html"><i class="fas fa-clipboard-check"></i><span> Grading</span></a>
+    <a class="nav-link active" href="faculty-student-attendence.html"><i class="fas fa-user-check"></i><span> Attendance</span></a>
+  </nav>
+</aside>
+
+  <main class="container">
+    <div class="card">
+      <h3>Take Attendance</h3>
+      <div class="controls">
+        <label style="font-weight:600">Class</label>
+        <select id="classSelect">
+          <option>Algorithms - 2nd Year</option>
+          <option>Math 101</option>
+          <option>Physics Lab</option>
+        </select>
+
+        <label style="font-weight:600">Date</label>
+        <input type="date" id="attDate" />
+
+        <button class="btn" id="saveBtn">Save</button>
+        <button class="btn-ghost" id="exportBtn">Export CSV</button>
+
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn-ghost" id="markAllPresent">All Present</button>
+          <button class="btn-ghost" id="markAllAbsent">All Absent</button>
+          <button class="btn-ghost" id="markAllTardy">All Tardy</button>
+        </div>
+      </div>
+
+      <div id="roster" class="roster">
+        <!-- roster rows inserted here -->
+      </div>
+
+      <div class="small">Attendance is stored locally in your browser (localStorage). Use Export CSV to download an attendance report.</div>
+    </div>
+  </main>
+
+  <script>
+    // Demo rosters per class (in a real app fetch from server)
+    const rosters = {
+      'Algorithms - 2nd Year': [
+        {id:'A01', name:'Riya Sharma'},
+        {id:'A02', name:'Arjun Patel'},
+        {id:'A03', name:'Priya Singh'},
+        {id:'A04', name:'Amit Verma'}
+      ],
+      'Math 101': [
+        {id:'M01', name:'Rahul Jain'},
+        {id:'M02', name:'Sneha Roy'},
+        {id:'M03', name:'Vikram Singh'}
+      ],
+      'Physics Lab': [
+        {id:'P01', name:'Arjun Patel'},
+        {id:'P02', name:'Neha Gupta'},
+        {id:'P03', name:'Kavita Rao'}
+      ]
+    };
+
+    // attendance storage shape: { '<class>|<date>': { studentId: 'present'|'absent'|'tardy' } }
+    const ATT_KEY = 'faculty_attendance_v1';
+    let store = JSON.parse(localStorage.getItem(ATT_KEY) || '{}');
+
+    const classSelect = document.getElementById('classSelect');
+    const attDate = document.getElementById('attDate');
+    const rosterEl = document.getElementById('roster');
+    const saveBtn = document.getElementById('saveBtn');
+    const exportBtn = document.getElementById('exportBtn');
+
+    function isoToday(){ const d=new Date(); return d.toISOString().slice(0,10); }
+
+    // Initialize
+    attDate.value = isoToday();
+    renderRoster();
+
+    classSelect.addEventListener('change', renderRoster);
+    attDate.addEventListener('change', renderRoster);
+
+    function keyFor(className, date){ return `${className}|${date}` }
+
+    function getAttendance(className, date){ return store[keyFor(className,date)] || {}; }
+
+    function saveAttendance(){
+      const k = keyFor(classSelect.value, attDate.value);
+      const data = {};
+      document.querySelectorAll('.student-row').forEach(row => {
+        const sid = row.dataset.id;
+        const status = row.dataset.status || 'absent';
+        data[sid] = status;
+      });
+      store[k] = data;
+      localStorage.setItem(ATT_KEY, JSON.stringify(store));
+      alert('Attendance saved locally');
+    }
+
+    function renderRoster(){
+      const cls = classSelect.value;
+      const date = attDate.value;
+      const roster = rosters[cls] || [];
+      const att = getAttendance(cls, date);
+      rosterEl.innerHTML = roster.map(s => {
+        const status = att[s.id] || 'absent';
+        return `
+          <div class="student-row" data-id="${s.id}" data-status="${status}">
+            <div class="student-left"><div class="avatar">${s.name.split(' ').map(n=>n[0]).slice(0,2).join('')}</div><div><strong>${s.name}</strong><div class="small">${s.id}</div></div></div>
+            <div class="status-controls">
+              <button class="status-btn present" title="Present" onclick="setStatus(this,'present')"><i class="fas fa-check"></i></button>
+              <button class="status-btn absent" title="Absent" onclick="setStatus(this,'absent')"><i class="fas fa-times"></i></button>
+              <button class="status-btn tardy" title="Tardy" onclick="setStatus(this,'tardy')"><i class="fas fa-clock"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      // apply styles to reflect status
+      document.querySelectorAll('.student-row').forEach(row=>{
+        const st = row.dataset.status;
+        highlightRow(row, st);
+      });
+    }
+
+    function highlightRow(row, status){
+      row.querySelectorAll('.status-btn').forEach(btn=>btn.classList.remove('active'));
+      if(status==='present') row.querySelector('.status-btn.present').classList.add('active');
+      if(status==='absent') row.querySelector('.status-btn.absent').classList.add('active');
+      if(status==='tardy') row.querySelector('.status-btn.tardy').classList.add('active');
+      row.dataset.status = status;
+    }
+
+    function setStatus(button, status){
+      const row = button.closest('.student-row');
+      highlightRow(row, status);
+    }
+
+    document.getElementById('markAllPresent').addEventListener('click', ()=>{
+      document.querySelectorAll('.student-row').forEach(r=>highlightRow(r,'present'));
+    });
+    document.getElementById('markAllAbsent').addEventListener('click', ()=>{
+      document.querySelectorAll('.student-row').forEach(r=>highlightRow(r,'absent'));
+    });
+    document.getElementById('markAllTardy').addEventListener('click', ()=>{
+      document.querySelectorAll('.student-row').forEach(r=>highlightRow(r,'tardy'));
+    });
+
+    saveBtn.addEventListener('click', saveAttendance);
+
+    exportBtn.addEventListener('click', ()=>{
+      const cls = classSelect.value; const date = attDate.value; const att = getAttendance(cls,date);
+      // if unsaved, pull current row statuses
+      const rows = document.querySelectorAll('.student-row');
+      const data = [];
+      rows.forEach(r=>{
+        const id = r.dataset.id; const name = r.querySelector('strong').textContent; const status = r.dataset.status;
+        data.push({id,name,status});
+      });
+      // build CSV
+      const header = ['ID','Name','Status'];
+      const csv = [header.join(',')].concat(data.map(d=>[d.id,`"${d.name}"`,d.status].join(','))).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `${cls.replace(/\s+/g,'_')}_${date}_attendance.csv`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+    function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+  </script>
+</body>
+</html>
