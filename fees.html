@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fees - College Portal</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Card and table styles from previous theme */
+.card {
+  background:#fff;
+  padding:24px;
+  border-radius:12px;
+  border:1px solid #e9ecef;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom:24px;
+  transition:box-shadow 0.3s;
+}
+.card:hover {
+  box-shadow:0 8px 30px rgba(0,0,0,0.08);
+}
+table { width:100%; border-collapse: collapse; }
+th, td { padding:12px 10px; text-align:center; border-radius:8px; }
+th { background:#3498db; color:#fff; font-weight:600; }
+tr:nth-child(even) { background:#f1f7fb; }
+tr:hover { background:#eaf6ff; }
+.days-left { font-size:0.85rem; color:#3498db; font-weight:600; }
+.download-btn { background:rgba(52,152,219,0.08); color:#3498db; padding:5px 10px; border-radius:8px; font-size:0.85rem; cursor:pointer; transition:background 0.3s; }
+.download-btn:hover { background:#eaf6ff; }
+.main-content { padding: 0 16px; }
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center; z-index:100; }
+.modal-content { background:#fff; padding:24px; border-radius:12px; width:400px; max-width:90%; box-shadow:0 8px 30px rgba(0,0,0,0.08); position:relative; }
+.modal-content h3 { margin-bottom:16px; color:#3498db; }
+.modal-content input, .modal-content select { width:100%; padding:10px; margin:6px 0 12px; border-radius:8px; border:1px solid #e9ecef; }
+.qr-container { margin-top:15px; text-align:center; }
+.qr-container img { width:150px; height:150px; border-radius:12px; border:1px solid #e9ecef; }
+.close-btn { position:absolute; top:12px; right:12px; background:none; border:none; font-size:1.2rem; cursor:pointer; color:#6c757d; }
+
+/* Theme, navbar, header from 1.html */
+body {font-family: 'Inter', sans-serif; line-height:1.6; color:#2c3e50; background:#f8f9fa; overflow-x:hidden;}
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 0.8rem 1.5rem;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+.nav-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 54px;
+}
+.nav-left {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.nav-center {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.nav-right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 120px;
+  padding-right: 16px;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+.logo i {
+  margin-right: 0.5rem;
+  color: #3498db;
+  font-size: 1.8rem;
+}
+nav {
+  flex: 1;
+  margin: 0 2rem;
+}
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 1.2rem;
+  height: 100%;
+}
+.nav-menu li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-menu li a:hover {
+  color: #007bff;
+}
+.login-btn {
+  background: #007bff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background 0.3s;
+}
+.login-btn:hover {
+  background: #0056b3;
+}
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav {
+    margin: 1rem 0;
+    width: 100%;
+  }
+  .nav-menu {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .nav-right {
+    width: 100%;
+    justify-content: flex-end;
+    padding-right: 0;
+    margin-top: 8px;
+  }
+  .login-btn {
+    align-self: flex-end;
+    margin-right: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+
+<header class="header">
+  <div class="nav-container">
+    <div class="nav-left">
+      <span class="logo"><i class="fas fa-graduation-cap"></i> College Portal</span>
+    </div>
+    <nav class="nav-center">
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="academics.html">Academics</a></li>
+        <li><a href="admission.html">Admission</a></li>
+        <li><a href="fees.html" style="color:#3498db;font-weight:600;">Fees</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+    </div>
+  </div>
+</header>
+
+<main class="main-content" style="margin-top:80px;">
+  <div class="card">
+    <table>
+      <tr>
+        <th>Year</th>
+        <th>Semester</th>
+        <th>Tuition Fees</th>
+        <th>Exam Fees</th>
+        <th>Days Left</th>
+        <th>Receipt</th>
+      </tr>
+      <tbody id="feesList"></tbody>
+    </table>
+  </div>
+  <div style="text-align:center; margin-bottom:20px;">
+    <button onclick="openModal()"><i class="fas fa-credit-card"></i> Pay Now</button>
+  </div>
+</main>
+
+<div class="modal" id="paymentModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+    <h3>Pay Fees</h3>
+    <input type="text" id="studentName" placeholder="Enter Student Name" required>
+    <input type="text" id="parentName" placeholder="Enter Parent's Name" required>
+    <input type="text" id="rollNo" placeholder="Enter Roll Number" required>
+    <select id="branch" required>
+      <option value="">Select Branch</option>
+      <option>CSE</option><option>ECE</option><option>ME</option><option>CE</option><option>EE</option>
+    </select>
+    <select id="year" required>
+      <option value="">Select Year</option>
+      <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option>
+    </select>
+    <select id="semester" required>
+      <option value="">Select Semester</option>
+      <option>Sem 1 (Odd)</option><option>Sem 2 (Even)</option><option>Sem 3 (Odd)</option>
+      <option>Sem 4 (Even)</option><option>Sem 5 (Odd)</option><option>Sem 6 (Even)</option>
+      <option>Sem 7 (Odd)</option><option>Sem 8 (Even)</option>
+    </select>
+    <input type="text" id="bankName" placeholder="Enter Bank Name" required>
+    <input type="text" id="ifscCode" placeholder="Enter IFSC Code" required>
+    <div class="qr-container">
+      <p>Scan to Pay (Registrar Office):</p>
+      <img src="qr-code.png" alt="QR Code">
+    </div>
+    <button onclick="confirmPayment()" style="margin-top:10px;"><i class="fas fa-check-circle"></i> Confirm & Pay</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const { jsPDF } = window.jspdf;
+
+const fees = [
+  {year:"1st Year", sem:"Sem 1 (Odd)", tuition:"₹60,000", exam:"₹5,000", due:"2025-10-05"},
+  {year:"1st Year", sem:"Sem 2 (Even)", tuition:"₹61,100", exam:"₹5,000", due:"2025-12-01"},
+  {year:"2nd Year", sem:"Sem 3 (Odd)", tuition:"₹65,000", exam:"₹5,000", due:"2026-01-15"},
+  {year:"2nd Year", sem:"Sem 4 (Even)", tuition:"₹66,100", exam:"₹5,000", due:"2026-03-01"},
+  {year:"3rd Year", sem:"Sem 5 (Odd)", tuition:"₹70,000", exam:"₹5,000", due:"2026-04-10"},
+  {year:"3rd Year", sem:"Sem 6 (Even)", tuition:"₹71,100", exam:"₹5,000", due:"2026-06-01"},
+  {year:"4th Year", sem:"Sem 7 (Odd)", tuition:"₹75,000", exam:"₹5,000", due:"2026-07-15"},
+  {year:"4th Year", sem:"Sem 8 (Even)", tuition:"₹76,100", exam:"₹5,000", due:"2026-09-01"}
+];
+
+function renderFees(){
+  const container=document.getElementById('feesList');
+  container.innerHTML='';
+  fees.forEach(f=>{
+    const dueDate=new Date(f.due);
+    const today=new Date();
+    const diffDays=Math.ceil((dueDate-today)/(1000*60*60*24));
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${f.year}</td>
+      <td>${f.sem}</td>
+      <td>${f.tuition}</td>
+      <td>${f.exam}</td>
+      <td class="days-left">${diffDays>0?diffDays+' days left':'Due'}</td>
+      <td><span class="download-btn" onclick="downloadReceipt('${f.year}','${f.sem}','${f.tuition}','${f.exam}')"><i class="fas fa-download"></i> PDF</span></td>
+    `;
+    container.appendChild(tr);
+  });
+}
+
+function downloadReceipt(year, sem, tuition, exam){
+  const doc=new jsPDF();
+  doc.setFontSize(16); doc.setTextColor(52,152,219);
+  doc.text("College Fees Receipt",20,20);
+  doc.setFontSize(12); doc.setTextColor(0,0,0);
+  doc.text(`Year: ${year}`,20,40);
+  doc.text(`Semester: ${sem}`,20,50);
+  doc.text(`Tuition Fees: ${tuition}`,20,60);
+  doc.text(`Exam Fees: ${exam}`,20,70);
+  doc.text(`Date: ${new Date().toLocaleDateString()}`,20,80);
+  doc.save(`${year}_${sem}_Fees_Receipt.pdf`);
+}
+
+function openModal(){ document.getElementById('paymentModal').style.display='flex'; }
+function closeModal(){ document.getElementById('paymentModal').style.display='none'; }
+function confirmPayment(){
+  const name=document.getElementById('studentName').value;
+  const parent=document.getElementById('parentName').value;
+  const roll=document.getElementById('rollNo').value;
+  const branch=document.getElementById('branch').value;
+  const year=document.getElementById('year').value;
+  const sem=document.getElementById('semester').value;
+  const bank=document.getElementById('bankName').value;
+  const ifsc=document.getElementById('ifscCode').value;
+
+  if(name && parent && roll && branch && year && sem && bank && ifsc){
+    alert(`Payment Initiated for ${name}\nParent: ${parent}\nRoll: ${roll}\nBranch: ${branch}\nYear: ${year}\nSemester: ${sem}\nBank: ${bank}\nIFSC: ${ifsc}\nPlease complete payment via QR code.`);
+    closeModal();
+  } else { alert('Please fill all fields before proceeding!'); }
+}
+
+renderFees();
+</script>
+</body>
+</html>
