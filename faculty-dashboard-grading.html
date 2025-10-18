@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Faculty Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card: #fff;
+  --muted: #6c757d;
+  --text: #2c3e50;
+  --primary: #3498db;
+}
+* { box-sizing: border-box; margin: 0; padding: 0 }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh }
+
+/* Topbar */
+.topbar {
+  height: 64px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700 }
+.brand i { color: var(--primary) }
+.menu-toggle {
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 12px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 64px; 
+  left: 0;
+  width: 70px;
+  height: calc(100vh - 64px);
+  background: var(--card);
+  border-right: 1px solid #e9ecef;
+  border-radius: 0 12px 12px 0;
+  padding: 12px;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  z-index: 40;
+}
+.sidebar.open { width: 260px; }
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-link i { font-size: 18px; }
+.nav-link span { display: none; }
+.sidebar.open .nav-link span { display: inline; }
+
+.nav-link.active { background: #eaf6ff; color: var(--primary); font-weight: 600 }
+.nav-link:hover { background: #f1f7fb }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <i class="fas fa-bars menu-toggle" onclick="toggleSidebar()"></i>
+    <div class="brand"><i class="fas fa-chalkboard"></i> Faculty Portal</div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <input placeholder="Search students or classes" style="padding:8px 10px;border-radius:8px;border:1px solid #e9ecef"/>
+    <div class="avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff">F</div>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <nav>
+    <a class="nav-link" href="faculty.html"><i class="fas fa-home"></i><span> Dashboard</span></a>
+    <a class="nav-link" href="faculty-dashboard-class.html"><i class="fas fa-calendar"></i><span> My Classes</span></a>
+    <a class="nav-link active" href="faculty-dashboard-grading.html"><i class="fas fa-clipboard-check"></i><span> Grading</span></a>
+    <a class="nav-link" href="faculty-student-attendence.html"><i class="fas fa-user-check"></i><span> Attendance</span></a>
+  </nav>
+</aside>
+
+
+
+
+
+<script>
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+</script>
+</body></html>
