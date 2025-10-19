@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Allocation, Room Status & Warden Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                background: linear-gradient(120deg, #eaf6ff 0%, #f4f7fb 100%);
+                color: #2c3e50;
+                margin: 0;
+                min-height: 100vh;
+                transition: background 0.8s;
+                animation: bgmove 12s linear infinite alternate;
+            }
+            @keyframes bgmove {
+                0% { background-position: 0% 0%; }
+                100% { background-position: 100% 100%; }
+            }
+            .container { max-width: 1400px; margin: 40px auto; padding: 0 16px; }
+            h1 { text-align: center; margin-bottom: 18px; font-size: 2.3rem; letter-spacing: -1px; font-weight: 700; color: #1a2947; }
+            .dashboard { display: flex; gap: 32px; flex-wrap: wrap; }
+            .plan-section { flex: 2; min-width: 340px; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,62,80,0.10); padding: 36px 32px; transition: box-shadow 0.2s; }
+            .plan-section:hover { box-shadow: 0 16px 40px rgba(44,62,80,0.16); }
+            .plan-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 18px; letter-spacing: -0.5px; color: #217dbb; display: flex; align-items: center; gap: 10px; }
+            .plan-title i { color: #217dbb; font-size: 1.1em; }
+            .hostel-card { background:#fff;border:1px solid rgba(33,125,187,0.08);padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;min-width:80px }
+            .hostel-card.active{background:linear-gradient(135deg,#217dbb,#3498db);color:#fff;border-color:transparent}
+            .hostel-card-row { display: flex; justify-content: center; gap: 2.5rem; margin: 60px 0 32px 0; }
+            .hostel-modal-bg {
+                position: fixed;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                background: rgba(44,62,80,0.18);
+                backdrop-filter: blur(8px);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.28s;
+            }
+            .hostel-modal-bg.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .hostel-modal {
+                background: #fff;
+                border-radius: 18px;
+                box-shadow: 0 18px 48px rgba(15,33,48,0.32);
+                width: 80vw;
+                max-width: 1200px;
+                min-height: 60vh;
+                padding: 40px 32px;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                opacity: 0;
+                transform: scale(0.96);
+                transition: opacity 0.28s, transform 0.28s;
+            }
+            .hostel-modal-bg.active .hostel-modal {
+                opacity: 1;
+                transform: scale(1);
+            }
+            .hostel-modal-close {
+                position: absolute;
+                top: 18px;
+                right: 24px;
+                background: none;
+                border: none;
+                font-size: 2.2rem;
+                color: #1a2947;
+                cursor: pointer;
+                z-index: 1;
+                font-weight: bold;
+                text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            }
+            .hostel-card-card {
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+                padding: 2rem;
+                width: 320px;
+                text-align: center;
+                transition: transform 0.18s, box-shadow 0.18s, outline 0.18s;
+                cursor: pointer;
+                border: 1px solid #e9ecef;
+                outline: none;
+            }
+            .hostel-card-card:focus {
+                outline: 3px solid #217dbb;
+                box-shadow: 0 0 0 6px rgba(33,125,187,0.10);
+            }
+            .hostel-card-card:active {
+                transform: scale(0.97);
+            }
+            .hostel-card-card:hover {
+                box-shadow: 0 18px 44px rgba(33,125,187,0.18);
+                transform: scale(1.04);
+            }
+            .hostel-card-card img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-radius: 10px;
+                margin-bottom: 1.2rem;
+            }
+            .hostel-card-card .hostel-title {
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: #3498db;
+                margin-bottom: 0.5rem;
+            }
+            .hostel-card-card .hostel-desc {
+                font-size: 1.05rem;
+                color: #55606a;
+                margin-bottom: 0.5rem;
+            }
+            .hostel-card-card:hover {
+                box-shadow: 0 12px 34px rgba(33,125,187,0.14);
+                transform: translateY(-8px);
+            }
+            .hostel-card-card.active {
+                box-shadow: 0 18px 44px rgba(33,125,187,0.18);
+                border-color: #3498db;
+                outline: 3px solid rgba(52,152,219,0.10);
+            }
+            .room-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-bottom: 24px; }
+            .room { background: linear-gradient(135deg,#eaf6ff 60%,#f8f9fa 100%); border-radius: 12px; padding: 20px 0 12px 0; text-align: center; font-size: 1.08rem; font-weight: 700; cursor: pointer; border: 2px solid #eaf6ff; transition: box-shadow 0.2s, border 0.2s, transform 0.18s; position: relative; box-shadow: 0 2px 8px rgba(44,62,80,0.06); }
+            .room.occupied { background: linear-gradient(135deg,#ffeaea 60%,#fff6f6 100%); border-color: #e57373; color: #c0392b; }
+            .room.vacant { background: linear-gradient(135deg,#eaf6ff 60%,#f8f9fa 100%); border-color: #4fa3ff; color: #2980b9; }
+            .room .student { display: block; font-size: 0.97rem; font-weight: 400; color: #888; margin-top: 6px; }
+            .room .status-dot { position: absolute; top: 10px; right: 14px; width: 12px; height: 12px; border-radius: 50%; border:2px solid #fff; }
+            .room.occupied .status-dot { background: #e74c3c; }
+            .room.vacant .status-dot { background: #27ae60; }
+            .room:hover { box-shadow: 0 16px 40px rgba(44,62,80,0.18); transform: translateY(-6px) scale(1.05); z-index:2; }
+            .room .icon { font-size: 1.3rem; margin-bottom: 2px; display: block; }
+            .legend { display: flex; gap: 22px; margin-bottom: 22px; }
+            .legend span { display: flex; align-items: center; gap: 7px; font-size: 1.01rem; }
+            .legend-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+            .legend-dot.occ { background: #e74c3c; }
+            .legend-dot.vac { background: #27ae60; }
+            .guidelines { flex: 1; min-width: 320px; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,62,80,0.10); padding: 36px 32px; transition: box-shadow 0.2s; }
+            .guidelines:hover { box-shadow: 0 16px 40px rgba(44,62,80,0.16); }
+            .guidelines h2 { font-size: 1.18rem; margin-bottom: 14px; font-weight: 700; color: #217dbb; }
+            .guidelines ul { padding-left: 20px; }
+            .guidelines li { margin-bottom: 10px; font-size: 1.03rem; }
+            .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+            .section-header i { color: #217dbb; }
+            @media (max-width: 900px) { .dashboard { flex-direction: column; } .plan-section, .guidelines { width: 100%; } }
+            .header {
+                background: #ffffff;
+                border-bottom: 1px solid #e9ecef;
+                color: #2c3e50;
+                padding: 1rem 0;
+                position: fixed;
+                width: 100%;
+                top: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+            }
+            .nav-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 2rem;
+            }
+            .logo {
+                display: flex;
+                align-items: center;
+                font-family: 'Inter', sans-serif;
+                font-size: 1.8rem;
+                font-weight: 600;
+                letter-spacing: -0.3px;
+                color: #2c3e50;
+            }
+            .logo i {
+                margin-right: 0.8rem;
+                color: #3498db;
+                font-size: 1.8rem;
+            }
+            .nav-menu {
+                display: flex;
+                list-style: none;
+                gap: 2rem;
+            }
+            .nav-menu a {
+                color: #6c757d;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                font-weight: 500;
+                font-size: large;
+                position: relative;
+                padding: 0.5rem 1rem;
+            }
+            .nav-menu a:hover {
+                color: #3498db;
+            }
+            .nav-menu a::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 50%;
+                width: 0;
+                height: 2px;
+                background: #3498db;
+                transition: all 0.3s ease;
+                transform: translateX(-50%);
+            }
+            .nav-menu a:hover::after {
+                width: 80%;
+            }
+            .login-btn {
+                background: #3498db;
+                color: white;
+                padding: 0.8rem 1.5rem;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 500;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+            }
+            .login-btn:hover {
+                background: #2980b9;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            }
+        </style>
+</head>
+<body>
+        <!-- Header copied from 1.html -->
+        <header class="header">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i> College Portal
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="1.html">Home</a></li>
+                        <li><a href="#">Hostels</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <a href="#" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+        </header>
+        <div class="container" style="margin-top:100px;">
+            
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 18px;">
+                <button id="wardenLoginBtn" style="background: #2c3e50; color: #fff; border: none; border-radius: 7px; padding: 8px 18px; font-size: 1rem; font-weight: 600; cursor: pointer;">Hostel Warden Login</button>
+                <button id="guidelinesBtn" style="background: #3498db; color: #fff; border: none; border-radius: 7px; padding: 8px 18px; font-size: 1rem; font-weight: 600; cursor: pointer;">View Guidelines</button>
+                <button id="demoRoomBtn" style="background: #ff7f50; color: #fff; border: none; border-radius: 7px; padding: 8px 18px; font-size: 1rem; font-weight: 600; cursor: pointer;">Show Room Demo</button>
+            </div>
+            <h1>Hostel Live Allocation & Room Status</h1>
+            <!-- Hostel selector cards -->
+            <div class="hostel-card-row" id="hostelSelector">
+                <div class="hostel-card-card" data-id="bh1">        
+                    <img src="bh1.webp  " alt="BH1">
+                    <div class="hostel-title">BH1</div>
+                    <div class="hostel-desc">Boys Hostel 1 — 6 rooms</div>
+                </div>
+                <div class="hostel-card-card" data-id="bh2">
+                    <img src="bh2.avif" alt="BH2">
+                    <div class="hostel-title">BH2</div>
+                    <div class="hostel-desc">Boys Hostel 2 — 6 rooms</div>
+                </div>
+                <div class="hostel-card-card" data-id="gh1">
+                    <img src="WhatsApp Image 2025-09-25 at 11.58.55.jpeg" alt="GH1">
+                    <div class="hostel-title">GH1</div>
+                    <div class="hostel-desc">Girls Hostel 1 — 6 rooms</div>
+                </div>
+            </div>
+        <!-- Warden Login Modal -->
+        <div id="wardenLoginModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(44,62,80,0.18); z-index:1000; align-items:center; justify-content:center;">
+            <div style="background:#fff; border-radius:12px; box-shadow:0 8px 32px rgba(44,62,80,0.18); padding:32px 28px; min-width:320px; max-width:90vw; position:relative;">
+                <button id="closeWardenModal" style="position:absolute; top:12px; right:12px; background:none; border:none; font-size:1.3rem; color:#888; cursor:pointer;">&times;</button>
+                <h2 style="margin-top:0; font-size:1.2rem;">Hostel Warden Login</h2>
+                <form id="wardenLoginForm" onsubmit="event.preventDefault()" autocomplete="off">
+                    <div style="margin-bottom:16px;">
+                        <label for="wardenName" style="display:block; font-weight:600; margin-bottom:6px;">Name</label>
+                        <input type="text" id="wardenName" name="wardenName" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #d0d7e2; font-size:1rem;">
+                    </div>
+                    <div style="margin-bottom:18px;">
+                        <label for="wardenPassword" style="display:block; font-weight:600; margin-bottom:6px;">Password</label>
+                        <input type="password" id="wardenPassword" name="wardenPassword" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #d0d7e2; font-size:1rem;">
+                    </div>
+                    <button type="submit" style="background:#2c3e50; color:#fff; border:none; border-radius:7px; padding:8px 18px; font-size:1rem; font-weight:600; cursor:pointer;">Login</button>
+                </form>
+                <div id="wardenLoginMsg" style="color:#e74c3c; margin-top:10px; display:none;"></div>
+            </div>
+        </div>
+        <!-- Room Demo Panel -->
+        <div id="roomModal" style="display:none;position:fixed;inset:0;background:rgba(10,20,30,0.5);z-index:1200;align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:12px;padding:18px;min-width:320px;max-width:820px;box-shadow:0 18px 48px rgba(15,33,48,0.32);transition:all .18s ease;display:flex;gap:16px;flex-wrap:wrap;">
+                <button id="closeRoomModal" style="position:absolute;right:18px;top:14px;background:none;border:none;font-size:2.2rem;color:#1a2947;cursor:pointer;font-weight:bold;text-shadow:0 2px 8px rgba(0,0,0,0.18)">&times;</button>
+                <div style="flex:1;min-width:240px;max-width:320px">
+                    <div style="width:100%;height:180px;background:#eef7ff;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+                        <img id="modalRoomImage" src="" alt="room" style="width:100%;height:100%;object-fit:cover">
+                    </div>
+                </div>
+                <div style="flex:2;min-width:260px">
+                    <h3 id="modalRoomTitle" style="margin:0;color:#0f2130">Room 101</h3>
+                    <div style="display:flex;gap:10px;align-items:center;margin:8px 0">
+                        <div id="modalRoomStatus" style="color:#55606a">Status: Vacant</div>
+                        <div style="margin-left:auto;color:#8091a0;font-size:0.95rem">Capacity: <span id="modalCapacity">2</span></div>
+                    </div>
+                    <p id="modalAmenities" style="color:#55606a;margin-bottom:10px">Amenities: AC, Attached Washroom, Study Table</p>
+                    <p id="modalAllocDate" style="color:#8091a0;margin-bottom:8px;font-size:0.94rem">Allocated on: <span>—</span></p>
+                    <div style="display:flex;gap:10px;margin-top:8px">
+                        <button id="releaseBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #e74c3c;background:#fff;color:#e74c3c;cursor:pointer;display:none">Release Room</button>
+                    </div>
+                    <div style="margin-top:12px;color:#5b6b78">
+                        <strong>Notes:</strong>
+                        <div id="modalNotes" style="margin-top:6px;color:#6b7280">A bright room with good ventilation. Ideal for students who prefer quiet study space.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="dashboard">
+                <div id="hostelPrompt" style="text-align:center;width:100%;margin-bottom:12px;color:#5b6b78">Please select a hostel card above to view room status.</div>
+                <!-- Modal for room status -->
+                <div id="hostelModalBg" class="hostel-modal-bg">
+                    <div class="hostel-modal">
+                        <button class="hostel-modal-close" id="closeHostelModal">&times;</button>
+                        <section class="plan-section" id="roomSectionModal" style="box-shadow:none;padding:0;background:none;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                                <div class="plan-title"><i class="fas fa-building"></i> Hostel Room Plan (Floor 1)</div>
+                                <div style="display:flex;gap:12px;align-items:center">
+                                    <div style="font-size:0.95rem;color:#506070">Total: <span id="totalCount">0</span></div>
+                                    <div style="font-size:0.95rem;color:#e74c3c">Occupied: <span id="occupiedCount">0</span></div>
+                                    <div style="font-size:0.95rem;color:#27ae60">Vacant: <span id="vacantCount">0</span></div>
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:12px;margin-bottom:14px;align-items:center">
+                                <div style="flex:1">
+                                    <input id="roomSearch" placeholder="Search room number or student name" style="width:100%;padding:10px;border-radius:8px;border:1px solid #dbe7f5" />
+                                </div>
+                                <div class="legend">
+                                    <span><span class="legend-dot occ"></span> Occupied</span>
+                                    <span><span class="legend-dot vac"></span> Vacant</span>
+                                </div>
+                            </div>
+                            <div class="room-grid" id="roomGrid"></div>
+                            <div style="display:flex;justify-content:flex-end;margin-top:18px;">
+                                <button id="viewMoreBtn" style="background:#3498db;color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:1rem;font-weight:600;cursor:pointer;">View More</button>
+                            </div>
+                            <div id="hostelCarousel" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:800px;background:#fff;border-radius:16px;box-shadow:0 16px 40px rgba(44,62,80,0.22);padding:32px;z-index:100;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                                    <span style="font-weight:600;color:#217dbb;font-size:1.3rem;">Hostel Gallery</span>
+                                    <button id="closeCarouselBtn" style="background:none;border:none;font-size:1.6rem;color:#888;cursor:pointer;">&times;</button>
+                                </div>
+                                <div style="position:relative;width:100%;height:400px;display:flex;align-items:center;justify-content:center;">
+                                    <button id="carouselPrev" style="position:absolute;left:0;top:50%;transform:translateY(-50%);background:rgba(52,152,219,0.7);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:2rem;cursor:pointer;z-index:2;box-shadow:0 2px 8px rgba(44,62,80,0.12);display:flex;align-items:center;justify-content:center;">&#8592;</button>
+                                    <div id="carouselImages" style="width:100%;height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;"></div>
+                                    <button id="carouselNext" style="position:absolute;right:0;top:50%;transform:translateY(-50%);background:rgba(52,152,219,0.7);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:2rem;cursor:pointer;z-index:2;box-shadow:0 2px 8px rgba(44,62,80,0.12);display:flex;align-items:center;justify-content:center;">&#8594;</button>
+                                </div>
+                                <div style="display:flex;justify-content:center;gap:10px;margin-top:16px;" id="carouselNav"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <aside class="guidelines" id="guidelinesPanel" style="display:none;">
+                    <div class="section-header"><i class="fas fa-book"></i><h2 style="margin:0;">Hostel Guidelines</h2></div>
+                    <ul>
+                        <li>Maintain silence after 10 PM and respect others' privacy.</li>
+                        <li>Visitors are allowed only during designated hours and must register at the reception.</li>
+                        <li>Keep your room and common areas clean and tidy.</li>
+                        <li>Alcohol, drugs, and smoking are strictly prohibited.</li>
+                        <li>Report any maintenance issues to the warden immediately.</li>
+                        <li>Use of electrical appliances is subject to approval.</li>
+                        <li>Students must return to the hostel by 9:30 PM unless prior permission is granted.</li>
+                        <li>Damaging hostel property will result in penalties.</li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+        <script>
+            // Carousel images for each hostel
+            const hostelImages = {
+                bh1: ["bh11.webp","bh12.avif","bh13.jpg"],
+                bh2: ["bh21.webp","bh22.webp","bh23.jpg"],
+                gh1: ["gh1_1.jpg","gh1_2.jpg","gh1_3.jpg"]
+            };
+
+            let currentCarouselIndex = 0;
+
+            function showCarousel(hostelId) {
+                const images = hostelImages[hostelId] || [];
+                const carousel = document.getElementById('hostelCarousel');
+                if (!images.length) return;
+                carousel.style.display = 'block';
+                currentCarouselIndex = 0;
+                renderCarouselImage(images, currentCarouselIndex);
+                renderCarouselNav(images);
+            }
+
+            function renderCarouselImage(images, idx) {
+                const carouselImages = document.getElementById('carouselImages');
+                carouselImages.innerHTML = `<img src="${images[idx]}" style="width:100%;height:400px;object-fit:cover;border-radius:12px;">`;
+            }
+
+            function renderCarouselNav(images) {
+                const carouselNav = document.getElementById('carouselNav');
+                carouselNav.innerHTML = images.map((_,i) => `<span style="width:14px;height:14px;border-radius:50%;background:${i===currentCarouselIndex?'#3498db':'#e9ecef'};display:inline-block;cursor:pointer;" onclick="window.setCarouselIndex(${i})"></span>`).join('');
+            }
+
+            window.setCarouselIndex = function(idx) {
+                const images = hostelImages[currentHostel] || [];
+                currentCarouselIndex = idx;
+                renderCarouselImage(images, idx);
+                renderCarouselNav(images);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('viewMoreBtn').addEventListener('click', function() {
+                    if(currentHostel) showCarousel(currentHostel);
+                });
+                document.getElementById('closeCarouselBtn').addEventListener('click', function() {
+                    document.getElementById('hostelCarousel').style.display = 'none';
+                });
+                document.getElementById('carouselPrev').addEventListener('click', function() {
+                    const images = hostelImages[currentHostel] || [];
+                    if(images.length) {
+                        currentCarouselIndex = (currentCarouselIndex - 1 + images.length) % images.length;
+                        renderCarouselImage(images, currentCarouselIndex);
+                        renderCarouselNav(images);
+                    }
+                });
+                document.getElementById('carouselNext').addEventListener('click', function() {
+                    const images = hostelImages[currentHostel] || [];
+                    if(images.length) {
+                        currentCarouselIndex = (currentCarouselIndex + 1) % images.length;
+                        renderCarouselImage(images, currentCarouselIndex);
+                        renderCarouselNav(images);
+                    }
+                });
+            });
+            // Hostels data (demo)
+            // Hostels data (demo) with localStorage persistence
+            const defaultHostels = {
+                bh1: { name: 'BH1', rooms: [
+                    {number:'101', occupied:true, student:'Riya Sharma'},
+                    {number:'102', occupied:false, student:''},
+                    {number:'103', occupied:true, student:'Arjun Patel'},
+                    {number:'104', occupied:false, student:''},
+                    {number:'105', occupied:true, student:'Priya Singh'},
+                    {number:'106', occupied:false, student:''},
+                    {number:'107', occupied:false, student:''},
+                    {number:'108', occupied:false, student:''},
+                    {number:'109', occupied:false, student:''},
+                    {number:'110', occupied:false, student:''},
+                    {number:'111', occupied:false, student:''},
+                    {number:'112', occupied:false, student:''}
+                ]},
+                bh2: { name: 'BH2', rooms: [
+                    {number:'201', occupied:false, student:''},
+                    {number:'202', occupied:true, student:'Karan Mehta'},
+                    {number:'203', occupied:false, student:''},
+                    {number:'204', occupied:true, student:'Nisha Rao'},
+                    {number:'205', occupied:false, student:''},
+                    {number:'206', occupied:true, student:'Deepak Kumar'},
+                    {number:'207', occupied:false, student:''},
+                    {number:'208', occupied:false, student:''},
+                    {number:'209', occupied:false, student:''},
+                    {number:'210', occupied:false, student:''},
+                    {number:'211', occupied:false, student:''},
+                    {number:'212', occupied:false, student:''}
+                ]},
+                gh1: { name: 'GH1', rooms: [
+                    {number:'301', occupied:true, student:'Sana Ali'},
+                    {number:'302', occupied:false, student:''},
+                    {number:'303', occupied:true, student:'Vikram Singh'},
+                    {number:'304', occupied:false, student:''},
+                    {number:'305', occupied:true, student:'Pooja Verma'},
+                    {number:'306', occupied:false, student:''},
+                    {number:'307', occupied:false, student:''},
+                    {number:'308', occupied:false, student:''},
+                    {number:'309', occupied:false, student:''},
+                    {number:'310', occupied:false, student:''},
+                    {number:'311', occupied:false, student:''},
+                    {number:'312', occupied:false, student:''}
+                ]}
+            };
+            function saveHostels() {
+                localStorage.setItem('hostelAllocations', JSON.stringify(hostels));
+            }
+            function loadHostels() {
+                const data = localStorage.getItem('hostelAllocations');
+                if(data) {
+                    try { return JSON.parse(data); } catch(e) { return defaultHostels; }
+                }
+                return defaultHostels;
+            }
+            let hostels = loadHostels();
+            let currentHostel = '';
+                // helper to update counters
+                function updateCounters(list) {
+                    const total = list.length;
+                    const occupied = list.filter(r => r.occupied).length;
+                    const vacant = total - occupied;
+                    document.getElementById('totalCount').textContent = total;
+                    document.getElementById('occupiedCount').textContent = occupied;
+                    document.getElementById('vacantCount').textContent = vacant;
+                }
+
+                // render rooms with event hooks
+                function renderRooms(filterText = '') {
+                    const grid = document.getElementById('roomGrid');
+                    const normalized = filterText.trim().toLowerCase();
+                    const rooms = hostels[currentHostel].rooms;
+                    const list = rooms.filter(r => {
+                        if(!normalized) return true;
+                        return r.number.toLowerCase().includes(normalized) || (r.student && r.student.toLowerCase().includes(normalized));
+                    });
+                    updateCounters(list);
+                    grid.innerHTML = list.map(r => {
+                        const icon = r.occupied ? '<i class="fas fa-user"></i>' : '<i class="fas fa-bed"></i>';
+                        const statusCls = r.occupied ? 'occupied' : 'vacant';
+                        const studentHtml = r.occupied ? `<span class="student">${r.student}</span>` : `<span class="student" style="color:#27ae60">Vacant</span>`;
+                        return `<div class="room ${statusCls}" data-room="${r.number}" data-hostel="${currentHostel}" data-occupied="${r.occupied}" data-student="${(r.student||'')}">
+                            <span class="icon">${icon}</span>
+                            <span class="status-dot"></span>
+                            Room ${r.number}
+                            ${studentHtml}
+                        </div>`;
+                    }).join('');
+
+                    // attach click handlers
+                    document.querySelectorAll('#roomGrid .room').forEach(el => {
+                        el.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            openRoomModal(el.getAttribute('data-room'), el.getAttribute('data-hostel') || currentHostel);
+                        });
+                    });
+                }
+
+                // open modal (demo style)
+                function openRoomModal(roomNo, hostelId = currentHostel) {
+                    if(!hostelId || !hostels[hostelId]) return; // nothing selected
+                    const rooms = hostels[hostelId].rooms;
+                    const room = rooms.find(r=>r.number===roomNo);
+                    if(!room) return;
+                    document.getElementById('modalRoomTitle').textContent = `Room ${room.number}`;
+                    const statusEl = document.getElementById('modalRoomStatus');
+                    const releaseBtn = document.getElementById('releaseBtn');
+                    const img = document.getElementById('modalRoomImage');
+                    const amenities = document.getElementById('modalAmenities');
+                    const capacity = document.getElementById('modalCapacity');
+                    const allocDate = document.getElementById('modalAllocDate').querySelector('span');
+                    const notes = document.getElementById('modalNotes');
+
+                    // populate demo values (could come from room object)
+                    img.src = room.image || '#';
+                    amenities.textContent = room.amenities || 'AC, Attached Washroom, Study Table';
+                    capacity.textContent = room.capacity || 2;
+                    notes.textContent = room.notes || 'A bright room with good ventilation. Ideal for students who prefer quiet study space.';
+
+                    if(room.occupied) {
+                        statusEl.textContent = `Status: Occupied by ${room.student}`;
+                        releaseBtn.style.display = 'inline-block';
+                        allocDate.textContent = room.allocDate || 'N/A';
+                    } else {
+                        statusEl.textContent = 'Status: Vacant';
+                        releaseBtn.style.display = 'none';
+                        allocDate.textContent = '—';
+                    }
+                    releaseBtn.onclick = function(){
+                        if(!confirm('Release this room?')) return;
+                        room.occupied = false; room.student = ''; room.allocDate = null;
+                        renderRooms(document.getElementById('roomSearch').value);
+                        closeRoomModal();
+                    };
+
+                    // Show room modal above hostel modal with animation
+                    var roomModal = document.getElementById('roomModal');
+                    roomModal.style.zIndex = 2100;
+                    roomModal.style.display = 'flex';
+                    roomModal.style.opacity = '0';
+                    roomModal.style.transform = 'scale(0.96)';
+                    setTimeout(function(){
+                        roomModal.style.opacity = '1';
+                        roomModal.style.transform = 'scale(1)';
+                    }, 10);
+                }
+
+                function closeRoomModal(){ 
+                    var roomModal = document.getElementById('roomModal');
+                    roomModal.style.opacity = '0';
+                    roomModal.style.transform = 'scale(0.96)';
+                    setTimeout(function(){
+                        roomModal.style.display = 'none';
+                        roomModal.style.zIndex = '';
+                    }, 220);
+                }
+                document.getElementById('closeRoomModal').addEventListener('click', closeRoomModal);
+
+                // search
+                document.getElementById('roomSearch').addEventListener('input', function(e){ 
+                    if(!currentHostel) { document.getElementById('hostelPrompt').style.display = 'block'; return; }
+                    document.getElementById('hostelPrompt').style.display = 'none';
+                    renderRooms(e.target.value); 
+                });
+
+                // demo button: require hostel selected
+                document.getElementById('demoRoomBtn').addEventListener('click', function(){ 
+                    if(!currentHostel) { alert('Please select a hostel first.'); return; }
+                    // open first room of current hostel for demo
+                    const firstRoom = hostels[currentHostel].rooms[0] && hostels[currentHostel].rooms[0].number;
+                    if(firstRoom) openRoomModal(firstRoom, currentHostel);
+                });
+
+                // hostel selector (cards)
+                document.querySelectorAll('#hostelSelector .hostel-card-card').forEach(card=>{
+                    card.addEventListener('click', function(){
+                        document.querySelectorAll('#hostelSelector .hostel-card-card').forEach(c=>c.classList.remove('active'));
+                        this.classList.add('active');
+                        this.focus();
+                        // Pop effect
+                        this.style.transform = 'scale(1.08)';
+                        setTimeout(()=>{ this.style.transform = ''; }, 180);
+                        currentHostel = this.getAttribute('data-id');
+                        // Show modal and hide prompt with animation
+                        const modalBg = document.getElementById('hostelModalBg');
+                        modalBg.classList.add('active');
+                        document.getElementById('hostelPrompt').style.display = 'none';
+                        renderRooms();
+                        // Hide carousel if open
+                        document.getElementById('hostelCarousel').style.display = 'none';
+                    });
+                });
+                // Close modal handler
+                function closeHostelModal() {
+                    const modalBg = document.getElementById('hostelModalBg');
+                    modalBg.classList.remove('active');
+                    document.querySelectorAll('#hostelSelector .hostel-card-card').forEach(c=>c.classList.remove('active'));
+                    currentHostel = '';
+                    document.getElementById('hostelPrompt').style.display = 'block';
+                }
+                document.getElementById('closeHostelModal').addEventListener('click', closeHostelModal);
+                // Keyboard accessibility: Esc closes modals
+                document.addEventListener('keydown', function(e){
+                    if(e.key === 'Escape') {
+                        if(document.getElementById('hostelModalBg').classList.contains('active')) closeHostelModal();
+                        if(document.getElementById('roomModal').style.display === 'flex') closeRoomModal();
+                    }
+                });
+                    // Do not auto-render on load. Show prompt until a hostel is selected.
+                    // Guidelines toggle
+            document.getElementById('guidelinesBtn').addEventListener('click', function() {
+                const panel = document.getElementById('guidelinesPanel');
+                panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+            });
+
+            // Warden Login Modal logic
+            const wardenLoginBtn = document.getElementById('wardenLoginBtn');
+            const wardenLoginModal = document.getElementById('wardenLoginModal');
+            const closeWardenModal = document.getElementById('closeWardenModal');
+            wardenLoginBtn.addEventListener('click', function() {
+                wardenLoginModal.style.display = 'flex';
+            });
+            closeWardenModal.addEventListener('click', function() {
+                wardenLoginModal.style.display = 'none';
+                document.getElementById('wardenLoginMsg').style.display = 'none';
+            });
+            // Optional: simple demo login validation
+            document.getElementById('wardenLoginForm').addEventListener('submit', function() {
+                const name = document.getElementById('wardenName').value.trim();
+                const pass = document.getElementById('wardenPassword').value;
+                const msg = document.getElementById('wardenLoginMsg');
+                if(name && pass) {
+                    msg.style.display = 'block';
+                    msg.style.color = '#27ae60';
+                    msg.textContent = 'Login successful! (Demo only)';
+                    setTimeout(()=>{ wardenLoginModal.style.display = 'none'; msg.style.display = 'none'; }, 1200);
+                } else {
+                    msg.style.display = 'block';
+                    msg.style.color = '#e74c3c';
+                    msg.textContent = 'Please enter name and password.';
+                }
+            });
+        </script>
+</body>
+</html>
