@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Library</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;background:#f8f9fa;color:#1f2d3d;line-height:1.6;}
+    .header{background:#fff;border-bottom:1px solid rgba(34,47,62,0.06);padding:14px 0;position:fixed;top:0;width:100%;z-index:1000;}
+    .nav-container{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 24px;}
+    .logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:1.5rem;color:#0f2130;text-decoration:none;}
+    .logo i{color:#217dbb;}
+    .nav-menu{display:flex;gap:18px;list-style:none;}
+    .nav-menu a{text-decoration:none;color:#6b7785;padding:6px 10px;border-radius:8px;font-weight:600;}
+    .nav-menu a:hover{color:#217dbb;background:rgba(33,125,187,0.04);}
+    .login-btn{background:#217dbb;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;}
+    .page-content{margin-top:100px;}
+    
+    .section {padding:80px 20px;}
+    .section:nth-child(even){background:#f1f1f1;}
+    .section h2 {font-size:2.5rem;font-weight:700;color:#2c3e50;margin-bottom:20px;text-align:center;}
+    .section p {max-width:800px;margin:auto;font-size:1.1rem;line-height:1.8;color:#555;text-align:center;}
+    .section img, .section video {width:100%;border-radius:15px;object-fit:cover;margin-top:20px;}
+    .section-content {display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2rem;margin-top:40px;}
+    .section-content .text {flex:1;min-width:300px;}
+    .section-content .media {flex:1;min-width:300px;}
+    
+    footer {background:#2c3e50;color:#fff;padding:40px 20px;text-align:center;margin-top:50px;}
+    footer h5 {font-weight:600;margin-bottom:15px;}
+    footer p {font-size:0.9rem;color:#ddd;}
+    footer a {color:#f1c40f;margin:0 10px;transition:0.3s;}
+    footer a:hover {color:#fff;transform:scale(1.2);}
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="#" class="logo"><i class="fas fa-university"></i> College Portal</a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="1.html">Home</a></li>
+          <li><a href="faculty.html">Faculty</a></li>
+          <li><a href="hostel.html">Hostel</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="login-btn" href="#">Sign In</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Hero Carousel -->
+    <div id="libraryCarousel" class="carousel slide container my-5" data-bs-ride="carousel">
+      <div class="carousel-inner rounded-4 shadow-lg">
+        <div class="carousel-item active">
+          <img src="html2.jpg" class="d-block w-100" alt="Library 1">
+        </div>
+        <div class="carousel-item">
+          <video class="d-block w-100" autoplay muted loop playsinline>
+            <source src="video.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="carousel-item">
+          <img src="college lib3.jpg" class="d-block w-100" alt="Library 3">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#libraryCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#libraryCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
+      </button>
+    </div>
+
+    <!-- Digital Library Section -->
+    <section class="section">
+      <h2>Digital Library</h2>
+      <div class="section-content">
+        <div class="text animate__animated animate__fadeInLeft">
+          <p>Our Digital Library offers thousands of e-books, journals, and research papers accessible to students anytime, anywhere. The system is fully integrated for easy search, download, and online reading.</p>
+        </div>
+        <div class="media animate__animated animate__fadeInRight">
+          <img src="college lib3.jpg" alt="Digital Library">
+        </div>
+      </div>
+    </section>
+
+    <!-- Computer Labs Section -->
+    <section class="section">
+      <h2>Computer Labs</h2>
+      <div class="section-content">
+        <div class="media animate__animated animate__fadeInLeft">
+          <img src="college lib1.jpg" alt="Computer Lab">
+        </div>
+        <div class="text animate__animated animate__fadeInRight">
+          <p>Our state-of-the-art computer labs are equipped with high-performance PCs, latest software, and internet access for research, programming, and project work.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Digital Book Issue Section -->
+    <section class="section">
+      <h2>Digital Book Issue</h2>
+      <div class="section-content">
+        <div class="text animate__animated animate__fadeInLeft">
+          <p>Students can issue and return books digitally using our library portal. The system tracks borrowed books and sends automatic reminders, making the process seamless and paperless.</p>
+        </div>
+        <div class="media animate__animated animate__fadeInRight">
+          <img src="html4.jpg" alt="Digital Book Issue">
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Zones Section -->
+    <section class="section">
+      <h2>Study Zones</h2>
+      <div class="section-content">
+        <div class="media animate__animated animate__fadeInLeft">
+          <img src="html5.jpg" alt="Study Zones">
+        </div>
+        <div class="text animate__animated animate__fadeInRight">
+          <p>Quiet study zones, group discussion areas, and comfortable seating make our library an ideal place for students to focus, collaborate, and excel academically.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <h5>College Library</h5>
+      <p>© 2025 College Name. All Rights Reserved.</p>
+      <div>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </footer>
+    
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
