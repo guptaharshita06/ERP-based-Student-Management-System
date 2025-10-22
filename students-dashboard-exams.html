@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Exams - College Portal</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root{
+			--bg:#f8f9fa;
+			--card:#ffffff;
+			--muted:#6c757d;
+			--text:#2c3e50;
+			--primary:#3498db;
+			--glass: rgba(52, 152, 219, 0.06);
+		}
+		*{box-sizing:border-box;margin:0;padding:0}
+		body{font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+		.topbar{height:64px;background:var(--card);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #e9ecef;position:sticky;top:0;z-index:30}
+		.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+		.brand i{color:var(--primary);font-size:20px}
+		.search{max-width:420px;flex:1;margin:0 20px}
+		.search input{width:100%;padding:8px 12px;border-radius:8px;border:1px solid #e6eef6}
+		.top-actions{display:flex;gap:12px;align-items:center}
+		.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff}
+		.layout{display:flex;gap:24px;max-width:1200px;margin:20px auto;padding:0 20px}
+		.sidebar{width:260px;background:var(--card);border:1px solid #e9ecef;border-radius:10px;padding:12px;height:calc(100vh - 120px);box-shadow:0 6px 20px rgba(16,24,40,0.04);position:sticky;top:80px}
+		.nav-link{display:flex;gap:12px;padding:10px;border-radius:8px;color:var(--muted);align-items:center;text-decoration:none}
+		.nav-link.active{background:#eaf6ff;color:var(--primary);font-weight:600}
+		.nav-link:hover{background:#f1f7fb}
+		.main{flex:1}
+		.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid #e9ecef;box-shadow:0 8px 30px rgba(16,24,40,0.04);margin-bottom:18px}
+		.card h4{font-size:15px;color:var(--muted);margin-bottom:10px}
+		.exam-list{margin-top:10px}
+		.exam-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f0f3f5}
+		.exam-item:last-child{border-bottom:none}
+		.exam-info{display:flex;flex-direction:column}
+		.exam-title{font-weight:700;font-size:1.08rem;color:var(--primary)}
+		.exam-date{font-size:0.98rem;color:var(--muted)}
+		.exam-details{font-size:0.97rem;color:var(--text)}
+		.chip{background:var(--glass);padding:6px 10px;border-radius:8px;color:var(--primary);font-weight:600;font-size:0.95rem}
+		@media (max-width:1000px){.layout{padding:0 12px}.sidebar{display:none}}
+		@media (max-width:640px){.search{display:none}}
+	</style>
+</head>
+<body>
+	<header class="topbar">
+		<div class="brand"><i class="fas fa-graduation-cap"></i><span>College Portal</span></div>
+		<div class="search"><input placeholder="Search exams, subjects..." /></div>
+		<div class="top-actions"><div class="small muted">Welcome, Student</div><div class="avatar">S</div></div>
+	</header>
+
+	<div class="layout">
+		<aside class="sidebar">
+			<nav>
+				<a class="nav-link" href="student.html"><i class="fas fa-home"></i> Dashboard</a>
+				<a class="nav-link" href="student-dashboard-classes.html"><i class="fas fa-chalkboard"></i> Classes</a>
+				<a class="nav-link" href="student-dashboard-assignments.html"><i class="fas fa-clipboard-list"></i> Assignments</a>
+				<a class="nav-link" href="student-dashboard-results.html"><i class="fas fa-chart-line"></i> Results</a>
+				<a class="nav-link" href="student-dashboard-messages.html"><i class="fas fa-envelope"></i> Messages</a>
+				<a class="nav-link active" href="student-dashboard-exams.html"><i class="fas fa-file-alt"></i> Exams</a>
+			</nav>
+		</aside>
+
+		<main class="main">
+					<div class="card">
+						<h4>Exam Term Selection</h4>
+						<div style="margin-bottom:18px;">
+							<select id="termSelect" style="padding:8px 14px;border-radius:8px;border:1px solid #e6eef6;font-size:1rem;">
+								<option value="midterm">Midterm</option>
+								<option value="endterm">End Term</option>
+							</select>
+						</div>
+						<div class="exam-list" id="examList">
+							<!-- Exam items will be injected here -->
+						</div>
+					</div>
+			<div class="card">
+				<h4>Exam Guidelines</h4>
+				<ul style="margin-left:18px;color:#6c757d;font-size:0.98rem">
+					<li>Arrive at least 15 minutes before the scheduled time.</li>
+					<li>Carry your college ID card and exam admit card.</li>
+					<li>Mobile phones and smart devices are strictly prohibited.</li>
+					<li>Follow all instructions given by the invigilator.</li>
+					<li>Any form of malpractice will lead to disciplinary action.</li>
+				</ul>
+			</div>
+		</main>
+	</div>
+
+		<script>
+			// Small interactivity: toggle active nav
+			document.querySelectorAll('.nav-link').forEach(a=>a.addEventListener('click',e=>{document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));e.currentTarget.classList.add('active')}))
+
+			// Exam data for terms
+			const exams = {
+				midterm: [
+					{ title: "Mathematics", date: "Sep 28, 2025 • 10:00 AM", details: "Room: MB201 • Duration: 2 hrs • Invigilator: Prof. Gupta" },
+					{ title: "Physics", date: "Sep 29, 2025 • 2:00 PM", details: "Room: CG08 • Duration: 2 hrs • Invigilator: Dr. Sharma" },
+					{ title: "English", date: "Sep 30, 2025 • 9:00 AM", details: "Room: MB105 • Duration: 2 hrs • Invigilator: Ms. Verma" },
+					{ title: "Computer Science", date: "Oct 1, 2025 • 11:00 AM", details: "Lab: CS Lab 2 • Duration: 1.5 hrs • Invigilator: Mr. Singh" },
+					{ title: "Chemistry", date: "Oct 2, 2025 • 1:00 PM", details: "Lab: CH Lab • Duration: 2 hrs • Invigilator: Dr. Rao" }
+				],
+				endterm: [
+					{ title: "Mathematics", date: "Nov 15, 2025 • 10:00 AM", details: "Room: MB201 • Duration: 3 hrs • Invigilator: Prof. Gupta" },
+					{ title: "Physics", date: "Nov 16, 2025 • 2:00 PM", details: "Room: CG08 • Duration: 3 hrs • Invigilator: Dr. Sharma" },
+					{ title: "English", date: "Nov 17, 2025 • 9:00 AM", details: "Room: MB105 • Duration: 3 hrs • Invigilator: Ms. Verma" },
+					{ title: "Computer Science", date: "Nov 18, 2025 • 11:00 AM", details: "Lab: CS Lab 2 • Duration: 2 hrs • Invigilator: Mr. Singh" },
+					{ title: "Chemistry", date: "Nov 19, 2025 • 1:00 PM", details: "Lab: CH Lab • Duration: 3 hrs • Invigilator: Dr. Rao" }
+				]
+			};
+
+			function showTerm(term) {
+				const list = document.getElementById('examList');
+				list.innerHTML = '';
+				exams[term].forEach(exam => {
+					const item = document.createElement('div');
+					item.className = 'exam-item';
+					item.innerHTML = `<div class="exam-info">
+						<span class="exam-title">${exam.title}</span>
+						<span class="exam-date">${exam.date}</span>
+						<span class="exam-details">${exam.details}</span>
+					</div>
+					<span class="chip">Scheduled</span>`;
+					list.appendChild(item);
+				});
+			}
+			// Show midterm by default
+			showTerm('midterm');
+			document.getElementById('termSelect').addEventListener('change', function(){
+				showTerm(this.value);
+			});
+		</script>
+</body>
+</html>
