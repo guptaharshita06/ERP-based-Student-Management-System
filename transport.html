@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transportation Facility</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="transport.css">
+  <style>
+    /* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+/* Banner */
+.banner {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* left corner */
+  color: white;
+  text-align: left;
+  padding-left: 60px;
+  background: url("tran1.jpg") center/cover no-repeat;
+}
+
+.banner .shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5); /* fade overlay */
+}
+
+.banner-text {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+}
+
+.banner-text h1 {
+  font-size: 64px;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+.banner-text h3 {
+  font-size: 48px;
+  color: #ffd700;
+  font-weight: 600;
+  margin-bottom: 15px;
+  letter-spacing: 2px; /* adds spacing between letters */
+}
+
+
+.banner-text .about-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #f0f0f0;
+}
+
+/* Features Section */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 40px 10%;
+  background: #f9f9f9;
+}
+
+.feature-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card i {
+  font-size: 40px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.feature-card h4 {
+  margin-bottom: 8px;
+  color: #007bff;
+}
+
+.feature-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Gallery Section */
+.gallery-section {
+  padding: 40px 10%;
+}
+
+.gallery-section h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #007bff;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: none;
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(.4,.8,.4,1);
+}
+.bus-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(44,62,80,0.14);
+  padding: 32px 32px 22px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 400px;
+  max-width: 400px;
+  margin: 0 18px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.bus-card img {
+  width: 340px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 16px rgba(44,62,80,0.10);
+}
+.bus-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #217dbb;
+  margin-top: 6px;
+  text-align: center;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(52,152,219,0.7);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 2.2rem;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.12);
+}
+.carousel-arrow.left { left: 0; }
+.carousel-arrow.right { right: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Banner Section -->
+  <section class="banner">
+    <div class="shade"></div>
+    <div class="banner-text">
+      <h1>Transport</h1>
+      <h3>Facility</h3>
+      <p class="about-text">
+        Our university offers a well-organized transport system with over 20 routes,
+        ensuring safe and reliable travel for students and staff. Covering up to 50 km,
+        the fleet of modern buses is operated by experienced drivers and aligned with
+        academic schedules for maximum convenience.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="feature-card">
+      <i class="fa-solid fa-bus"></i>
+      <h4>20+ Routes</h4>
+      <p>Covering up to 50km across the city.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fa-solid fa-shield"></i>
+      <h4>Safe & Secure</h4>
+      <p>Experienced drivers and well-maintained buses.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fa-solid fa-clock"></i>
+      <h4>On-Time Service</h4>
+      <p>Pick-up and drop schedules aligned with academic hours.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fa-solid fa-car"></i>
+      <h4>Campus Mobility</h4>
+      <p>Electric carts and 24/7 ambulance support on campus.</p>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery-section">
+    <h2>Transport Gallery</h2>
+    <div class="carousel">
+      <button class="carousel-arrow left" id="busPrev">&#8592;</button>
+      <div class="carousel-track" id="busCarouselTrack">
+        <div class="bus-card"><img src="bus1.jpg" alt="Bus 1"><div class="bus-title">Bus 1</div></div>
+        <div class="bus-card"><img src="bu2.webp" alt="Bus 2"><div class="bus-title">Bus 2</div></div>
+        <div class="bus-card"><img src="bus3.jpg" alt="Bus 3"><div class="bus-title">Bus 3</div></div>
+        <div class="bus-card"><img src="bus4.jpeg" alt="Bus 4"><div class="bus-title">Bus 4</div></div>
+      </div>
+      <button class="carousel-arrow right" id="busNext">&#8594;</button>
+    </div>
+  </section>
+
+  <script>
+    // Bus Carousel Logic
+const busCards = document.querySelectorAll('.bus-card');
+const busTrack = document.getElementById('busCarouselTrack');
+let busIndex = 0;
+const visibleCards = 1;
+function updateBusCarousel(idx) {
+  busTrack.style.transform = `translateX(-${idx * (260 + 24)}px)`;
+}
+document.getElementById('busPrev').onclick = function() {
+  busIndex = (busIndex - 1 + busCards.length) % busCards.length;
+  updateBusCarousel(busIndex);
+};
+document.getElementById('busNext').onclick = function() {
+  busIndex = (busIndex + 1) % busCards.length;
+  updateBusCarousel(busIndex);
+};
+// Auto-move every 3 seconds
+setInterval(function() {
+  busIndex = (busIndex + 1) % busCards.length;
+  updateBusCarousel(busIndex);
+}, 3000);
+  </script>
+</body>
+</html>
