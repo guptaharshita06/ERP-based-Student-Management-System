@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f8f9fa;
+      --card:#ffffff;
+      --muted:#6c757d;
+      --text:#2c3e50;
+      --primary:#3498db;
+      --glass: rgba(52, 152, 219, 0.06);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    /* header */
+    .topbar{height:64px;background:var(--card);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #e9ecef;position:sticky;top:0;z-index:30}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand i{color:var(--primary);font-size:20px}
+    .search{max-width:420px;flex:1;margin:0 20px}
+    .search input{width:100%;padding:8px 12px;border-radius:8px;border:1px solid #e6eef6}
+    .top-actions{display:flex;gap:12px;align-items:center}
+    .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff}
+
+    /* layout */
+    .layout{display:flex;gap:24px;max-width:1200px;margin:20px auto;padding:0 20px}
+    .sidebar{width:260px;background:var(--card);border:1px solid #e9ecef;border-radius:10px;padding:12px;height:calc(100vh - 120px);box-shadow:0 6px 20px rgba(16,24,40,0.04);position:sticky;top:80px}
+    .nav-link{display:flex;gap:12px;padding:10px;border-radius:8px;color:var(--muted);align-items:center;text-decoration:none}
+    .nav-link.active{background:#eaf6ff;color:var(--primary);font-weight:600}
+    .nav-link:hover{background:#f1f7fb}
+
+      </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><i class="fas fa-graduation-cap"></i><span>College Portal</span></div>
+    <div class="search"><input placeholder="Search classes, assignments, resources..." /></div>
+    <div class="top-actions"><div class="small muted">Welcome, Student</div><div class="avatar">S</div></div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav>
+        <a class="nav-link" href="student.html"><i class="fas fa-home"></i> Dashboard</a>
+        <a class="nav-link" href="student-dashboard-classes.html"><i class="fas fa-chalkboard"></i> Classes</a>
+        <a class="nav-link" href="student-dashboard-assignments.html"><i class="fas fa-clipboard-list"></i> Assignments</a>
+        <a class="nav-link active" href="student-dashboard-results.html"><i class="fas fa-chart-line"></i> Results</a>
+        <a class="nav-link" href="student-dashboard-messages.html"><i class="fas fa-envelope"></i> Messages</a>
+      </nav>
+    </aside>
+    </div>
+
+    </body>
+    </html>
