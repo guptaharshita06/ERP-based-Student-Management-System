@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Warden Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #2c3e50;
+      background: #f8f9fa;
+      overflow-x: hidden;
+    }
+
+    /* Header Styles (Allen theme) */
+    .header {
+      background: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+      color: #2c3e50;
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #2c3e50;
+    }
+
+    .logo i {
+      margin-right: 0.8rem;
+      color: #3498db;
+      font-size: 1.8rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      color: #6c757d;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      font-size: large;
+      position: relative;
+      padding: 0.5rem 1rem;
+    }
+
+    .nav-menu a:hover {
+      color: #3498db;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: #3498db;
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-menu a:hover::after {
+      width: 80%;
+    }
+
+    .login-btn {
+      background: #3498db;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .login-btn:hover {
+      background: #2980b9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    }
+
+    /* Main Content */
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 16px; margin-top: 110px; }
+    h1 { text-align: center; margin-bottom: 18px; font-size: 2.3rem; letter-spacing: -1px; font-weight: 700; color: #1a2947; }
+    .dashboard { display: flex; gap: 32px; flex-wrap: wrap; }
+    .panel { background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,62,80,0.10); padding: 36px 32px; margin-bottom: 36px; flex: 1; min-width: 370px; }
+    .panel h2 { font-size: 1.22rem; margin-bottom: 18px; font-weight: 700; color: #217dbb; letter-spacing: -0.5px; }
+    .students-table, .attendance-table, .complaints-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px 10px; text-align: left; font-size: 1.04rem; }
+    th { background: #eaf6ff; font-weight: 700; color: #217dbb; }
+    tr { border-bottom: 1px solid #e9ecef; }
+    .attendance-toggle { cursor: pointer; font-size: 1.2rem; border: none; background: none; }
+    .attendance-toggle.present { color: #27ae60; }
+    .attendance-toggle.absent { color: #e74c3c; }
+    .complaint-status { font-weight: 600; border-radius: 6px; padding: 2px 10px; font-size: 0.98rem; }
+    .complaint-status.open { background: #ffeaea; color: #c0392b; }
+    .complaint-status.closed { background: #eaf6ff; color: #2980b9; }
+    .student-photo { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #eaf6ff; margin-right: 10px; }
+    .student-info { display: flex; align-items: center; }
+    .student-details { line-height: 1.2; }
+    .badge { display: inline-block; background: #f1f7fb; color: #217dbb; border-radius: 6px; padding: 2px 8px; font-size: 0.95rem; font-weight: 600; margin-left: 6px; }
+    .contact-link { color: #217dbb; text-decoration: none; font-weight: 600; }
+    .contact-link:hover { text-decoration: underline; }
+    .table-section { overflow-x: auto; }
+    @media (max-width: 900px) { .dashboard { flex-direction: column; } .panel { width: 100%; } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-university"></i> College Portal</div>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="1.html">Home</a></li>
+          <li><a href="hostel-entry.html">Hostel Entry</a></li>
+          <li><a href="hostel.html">Hostel Status</a></li>
+          <li><a href="warden-dashboard.html">Warden</a></li>
+        </ul>
+      </nav>
+      <a class="login-btn" href="#">Sign Out</a>
+    </div>
+  </header>
+  <div class="container">
+    <h1>Hostel Warden Dashboard</h1>
+    <div class="dashboard">
+      <section class="panel" style="flex:2;">
+        <h2>All Students Details</h2>
+        <div class="table-section">
+          <table class="students-table">
+            <thead>
+              <tr>
+                <th>Name & Email</th>
+                <th>Room</th>
+                <th>Contact</th>
+                <th>Course</th>
+                <th>Year</th>
+                <th>Gender</th>
+                <th>Guardian</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTable"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel" style="flex:1;">
+        <h2>Take Attendance</h2>
+        <form id="attendanceForm" onsubmit="event.preventDefault()">
+          <label for="attDate">Date:</label>
+          <input type="date" id="attDate" required style="margin-bottom:10px;" />
+        </form>
+        <table class="attendance-table">
+          <thead>
+            <tr><th>Room</th><th>Student</th><th>Status</th></tr>
+          </thead>
+          <tbody id="attendanceTable"></tbody>
+        </table>
+      </section>
+    </div>
+    <section class="panel">
+      <h2>Complaints</h2>
+      <table class="complaints-table">
+        <thead>
+          <tr><th>Student</th><th>Room</th><th>Complaint</th><th>Status</th></tr>
+        </thead>
+        <tbody id="complaintsTable"></tbody>
+      </table>
+    </section>
+  </div>
+  <script>
+    // Demo student data (now more elaborative)
+    const students = [
+      {
+        name:'Riya Sharma',
+        photo:'#',
+        email:'riya.sharma@college.edu',
+        room:'101',
+        contact:'9876543210',
+        course:'B.Tech (CSE)',
+        year:'2',
+        gender:'Female',
+        guardian:'Suresh Sharma',
+        address:'23, Rose Villa, Sector 12, Delhi'
+      },
+      {
+        name:'Arjun Patel',
+        photo:'#',
+        email:'arjun.patel@college.edu',
+        room:'103',
+        contact:'9876543211',
+        course:'B.Sc (Physics)',
+        year:'1',
+        gender:'Male',
+        guardian:'Mahesh Patel',
+        address:'12, Green Park, Ahmedabad'
+      },
+      {
+        name:'Priya Singh',
+        photo:'',
+        email:'priya.singh@college.edu',
+        room:'105',
+        contact:'9876543212',
+        course:'B.Com (Hons)',
+        year:'3',
+        gender:'Female',
+        guardian:'Rajesh Singh',
+        address:'45, Lake Road, Lucknow'
+      },
+      {
+        name:'Amit Verma',
+        photo:'https://randomuser.me/api/portraits/men/66.jpg',
+        email:'amit.verma@college.edu',
+        room:'107',
+        contact:'9876543213',
+        course:'B.Tech (ECE)',
+        year:'4',
+        gender:'Male',
+        guardian:'Dinesh Verma',
+        address:'78, Sunrise Apt, Jaipur'
+      },
+      {
+        name:'Sneha Roy',
+        photo:'https://randomuser.me/api/portraits/women/66.jpg',
+        email:'sneha.roy@college.edu',
+        room:'109',
+        contact:'9876543214',
+        course:'BBA',
+        year:'2',
+        gender:'Female',
+        guardian:'Prakash Roy',
+        address:'9, Park Street, Kolkata'
+      },
+      {
+        name:'Rahul Jain',
+        photo:'https://randomuser.me/api/portraits/men/67.jpg',
+        email:'rahul.jain@college.edu',
+        room:'111',
+        contact:'9876543215',
+        course:'BCA',
+        year:'1',
+        gender:'Male',
+        guardian:'Sanjay Jain',
+        address:'34, MG Road, Indore'
+      }
+    ];
+    // Demo complaints data
+    const complaints = [
+      {student:'Riya Sharma', room:'101', complaint:'Leaking tap in bathroom', status:'open'},
+      {student:'Amit Verma', room:'107', complaint:'WiFi not working', status:'closed'},
+      {student:'Sneha Roy', room:'109', complaint:'Fan making noise', status:'open'}
+    ];
+    // Attendance data (in-memory, by date)
+    let attendance = {};
+    function renderStudents() {
+      const tbody = document.getElementById('studentsTable');
+      tbody.innerHTML = students.map(s => `
+        <tr>
+          <td>
+            <div class="student-info">
+              <div class="student-details">
+                <span style="font-weight:600;">${s.name}</span><br>
+                <span style="font-size:0.97rem; color:#217dbb;">${s.email}</span>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge">${s.room}</span></td>
+          <td><a href="tel:${s.contact}" class="contact-link">${s.contact}</a></td>
+          <td>${s.course}</td>
+          <td>${s.year}</td>
+          <td>${s.gender}</td>
+          <td>${s.guardian}</td>
+          <td>${s.address}</td>
+        </tr>
+      `).join('');
+    }
+    function renderAttendance() {
+      const date = document.getElementById('attDate').value;
+      if (!date) return;
+      if (!attendance[date]) attendance[date] = {};
+      const tbody = document.getElementById('attendanceTable');
+      tbody.innerHTML = students.map(s => {
+        const status = attendance[date][s.room];
+        return `<tr><td>${s.room}</td><td>${s.name}</td><td>
+          <button class="attendance-toggle present" title="Present" style="margin-right:6px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.15rem;${status===true?'background:#eaf6ff;box-shadow:0 0 0 2px #27ae60;':''}" onclick="markAttendance('${date}','${s.room}',true)"><i class='fas fa-check'></i></button>
+          <button class="attendance-toggle absent" title="Absent" style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.15rem;${status===false?'background:#ffeaea;box-shadow:0 0 0 2px #e74c3c;':''}" onclick="markAttendance('${date}','${s.room}',false)"><i class='fas fa-times'></i></button>
+        </td></tr>`;
+      }).join('');
+    }
+    function markAttendance(date, room, isPresent) {
+      if (!attendance[date]) attendance[date] = {};
+      attendance[date][room] = isPresent;
+      renderAttendance();
+    }
+    document.getElementById('attDate').addEventListener('change', renderAttendance);
+
+    // Auto-set attendance date to today and render
+    (function setTodayDate() {
+      const dateInput = document.getElementById('attDate');
+      if (!dateInput) return;
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const iso = `${yyyy}-${mm}-${dd}`;
+      dateInput.value = iso;
+      // ensure the attendance object has an entry for today
+      if (!attendance[iso]) attendance[iso] = {};
+      renderAttendance();
+    })();
+
+    // Render complaints
+    function renderComplaints() {
+      const tbody = document.getElementById('complaintsTable');
+      tbody.innerHTML = complaints.map(c => `<tr><td>${c.student}</td><td>${c.room}</td><td>${c.complaint}</td><td><span class="complaint-status ${c.status}">${c.status.charAt(0).toUpperCase()+c.status.slice(1)}</span></td></tr>`).join('');
+    }
+    renderStudents();
+    renderAttendance();
+    renderComplaints();
+  </script>
+</body>
+</html>
