@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Portal - Departments & Clubs</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0f4ff, #fafafa);
+      color: #2c3e50;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+    .logo { display: flex; align-items: center; font-size: 1.8rem; font-weight: 700; }
+    .logo i { margin-right: .8rem; color: #3498db; }
+    .nav-menu { display: flex; list-style: none; gap: 2rem; }
+    .nav-menu a {
+      color: #34495e; text-decoration: none; font-weight: 500;
+      font-size: 1rem; padding: .5rem 1rem; border-radius: 6px;
+      transition: all .3s;
+    }
+    .nav-menu a:hover { background: #3498db; color: #fff; }
+    .login-btn {
+      background: linear-gradient(135deg,#3498db,#2980b9);
+      color: #fff; padding: .7rem 1.4rem; border-radius: 30px;
+      font-weight: 600; transition: .3s; text-decoration: none;
+      box-shadow: 0 4px 10px rgba(52,152,219,.3);
+    }
+    .login-btn:hover { transform: translateY(-2px); }
+
+    /* Content */
+    .content { max-width: 1200px; margin: 120px auto; padding: 0 2rem; }
+    section { margin-bottom: 100px; }
+    section h2 {
+      font-size: 2rem; margin-bottom: 30px;
+      font-weight: 700; display: inline-block;
+      padding: 10px 20px; border-radius: 8px;
+      color: #fff;
+    }
+    .departments h2 {
+      background: linear-gradient(135deg, #3498db, #6dd5fa);
+    }
+    .clubs h2 {
+      background: linear-gradient(135deg, #e67e22, #f39c12);
+    }
+
+    /* Slider */
+    .slider-container {
+      position: relative; overflow: hidden; padding: 20px 0;
+    }
+    .slider-track {
+      display: flex; transition: transform 0.6s ease-in-out;
+    }
+    .card {
+      flex: 0 0 38%; max-width: 38%;
+      margin-right: 20px; border-radius: 20px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      cursor: pointer; transition: transform .3s, box-shadow .3s;
+      height: 380px; display: flex; flex-direction: column;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    .card img {
+      width: 100%; height: 240px; object-fit: cover;
+    }
+    .overlay { padding: 1.2rem; }
+    .overlay h3 { font-size: 1.3rem; margin-bottom: .5rem; color: #2c3e50; }
+    .overlay p { font-size: 1rem; color: #555; }
+
+    /* Differentiate cards */
+    .departments .card { border: 2px solid #3498db20; }
+    .clubs .card { border: 2px solid #e67e2220; }
+
+    /* Slider Buttons */
+    .slider-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      color: #333; border: none;
+      padding: 14px 18px; cursor: pointer;
+      border-radius: 50%; z-index: 10; transition: .3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    .slider-btn:hover { background: #3498db; color: #fff; }
+    .prev { left: -10px; }
+    .next { right: -10px; }
+
+    @media(max-width:768px){
+      .card { flex: 0 0 80%; max-width: 80%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-graduation-cap"></i> College Portal</div>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="1.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="departments.html">Departments</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="login.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="content">
+    <!-- Departments -->
+    <section class="departments">
+      <h2>Academic Departments</h2>
+      <div class="slider-container">
+        <button class="slider-btn prev" onclick="moveSlide('dept',-1)">❮</button>
+        <div class="slider-track" id="deptTrack">
+          <div class="card"><img src="https://source.unsplash.com/600x400/?computer"><div class="overlay"><h3>Computer Science</h3><p>AI, ML, software engineering.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?mechanical"><div class="overlay"><h3>Mechanical Engg</h3><p>Robotics, thermal design.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?electronics"><div class="overlay"><h3>Electronics</h3><p>VLSI, IoT, circuits.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?civil"><div class="overlay"><h3>Civil Engg</h3><p>Structures, design.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?electrical"><div class="overlay"><h3>Electrical Engg</h3><p>Power systems.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?biotech"><div class="overlay"><h3>Biotech</h3><p>Life sciences research.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?chemical"><div class="overlay"><h3>Chemical Engg</h3><p>Process, materials.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?aerospace"><div class="overlay"><h3>Aerospace Engg</h3><p>Flight & space systems.</p></div></div>
+        </div>
+        <button class="slider-btn next" onclick="moveSlide('dept',1)">❯</button>
+      </div>
+    </section>
+
+    <!-- Clubs -->
+    <section class="clubs">
+      <h2>Student Clubs</h2>
+      <div class="slider-container">
+        <button class="slider-btn prev" onclick="moveSlide('club',-1)">❮</button>
+        <div class="slider-track" id="clubTrack">
+          <div class="card"><img src="https://source.unsplash.com/600x400/?coding"><div class="overlay"><h3>Coding Club</h3><p>Hackathons & projects.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?music"><div class="overlay"><h3>Cultural Club</h3><p>Arts, dance, music.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?sports"><div class="overlay"><h3>Sports Club</h3><p>Fitness & competitions.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?robotics"><div class="overlay"><h3>Robotics Club</h3><p>Innovation & tech.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?photography"><div class="overlay"><h3>Photography Club</h3><p>Capturing creativity.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?literature"><div class="overlay"><h3>Literary Club</h3><p>Debates & writings.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?drama"><div class="overlay"><h3>Drama Club</h3><p>Theatre & acting.</p></div></div>
+          <div class="card"><img src="https://source.unsplash.com/600x400/?environment"><div class="overlay"><h3>Eco Club</h3><p>Sustainability drives.</p></div></div>
+        </div>
+        <button class="slider-btn next" onclick="moveSlide('club',1)">❯</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let deptIndex = 0, clubIndex = 0;
+    const deptTrack = document.getElementById("deptTrack");
+    const clubTrack = document.getElementById("clubTrack");
+
+    function moveSlide(type, dir) {
+      const track = type === 'dept' ? deptTrack : clubTrack;
+      const index = type === 'dept' ? deptIndex : clubIndex;
+      const total = track.children.length;
+      const movePercent = 40; // card width percentage
+
+      let newIndex = index + dir;
+      if(newIndex < 0) newIndex = total - 3;
+      if(newIndex > total - 3) newIndex = 0;
+
+      track.style.transform = `translateX(-${newIndex * movePercent}%)`;
+
+      if(type === 'dept') deptIndex = newIndex;
+      else clubIndex = newIndex;
+    }
+
+    // autoplay
+    setInterval(()=> moveSlide('dept',1), 4000);
+    setInterval(()=> moveSlide('club',1), 4500);
+  </script>
+</body>
+</html>
