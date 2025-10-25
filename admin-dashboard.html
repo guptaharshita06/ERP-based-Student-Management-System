@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --bg:#f5f7fa;
+  --card:#fff;
+  --muted:#6c757d;
+  --text:#2c3e50;
+  --primary:#3498db;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* Topbar */
+.topbar{height:64px;background:var(--card);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #e9ecef;position:sticky;top:0;z-index:30;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.brand i{color:var(--primary)}
+
+/* Layout */
+.layout{display:flex;gap:24px;max-width:1300px;margin:20px auto;padding:0 20px}
+
+/* Sidebar */
+.sidebar{width:240px;background:var(--card);border:1px solid #e9ecef;border-radius:10px;padding:12px;height:calc(100vh - 120px);position:sticky;top:80px;overflow-y:auto;box-shadow:0 4px 8px rgba(0,0,0,0.04)}
+.nav-link{display:flex;gap:12px;padding:10px;border-radius:8px;color:var(--muted);align-items:center;text-decoration:none;transition:0.2s;cursor:pointer}
+.nav-link.active{background:#eaf6ff;color:var(--primary);font-weight:600}
+.nav-link:hover{background:#f1f7fb;color:var(--primary)}
+
+/* Dropdown */
+.dropdown {margin-bottom:6px;}
+.dropdown-menu {display:none;flex-direction:column;margin-left:34px;margin-top:4px;}
+.dropdown-menu a {font-size:14px;padding:6px 8px;border-radius:6px;color:var(--muted);text-decoration:none;transition:0.2s;}
+.dropdown-menu a:hover {background:#f1f7fb;color:var(--primary);}
+.dropdown.open .dropdown-menu {display:flex;}
+.dropdown-toggle {cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+
+/* Main Content */
+.main{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid #e9ecef;box-shadow:0 4px 10px rgba(0,0,0,0.04);transition:0.3s}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(0,0,0,0.08)}
+.card h3{font-size:16px;color:var(--primary);margin-bottom:12px;font-weight:600}
+
+/* Stats summary */
+.summary{font-size:24px;font-weight:700;margin-bottom:4px}
+.summary span{display:block;font-size:13px;color:var(--muted)}
+
+/* Table */
+table{width:100%;border-collapse:collapse}
+table th,table td{padding:8px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
+table th{background:#f1f7fb;color:var(--primary);}
+
+/* Notices */
+.notice{list-style:none;margin:0;padding:0}
+.notice li{padding:8px 0;border-bottom:1px dashed #ddd;font-size:14px}
+
+/* Charts */
+canvas{max-height:200px !important}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="brand"><i class="fas fa-user-shield"></i>Admin Dashboard</div>
+</header>
+
+<!-- Layout -->
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle"><i class="fas fa-home"></i> Dashboard <i class="fas fa-chevron-down"></i></div>
+        <div class="dropdown-menu">
+          <a href="admin-dashboard.html">➤ Overview</a>
+          <a href="#">➤ Today’s Stats</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle"><i class="fas fa-user-plus"></i> Admissions <i class="fas fa-chevron-down"></i></div>
+        <div class="dropdown-menu">
+          <a href="form1.php">➤ Add Admission</a>
+          <a href="show.php">➤ View Admissions</a>
+          
+        </div>
+      </div>
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle"><i class="fas fa-rupee-sign"></i> Fees <i class="fas fa-chevron-down"></i></div>
+        <div class="dropdown-menu">
+          <a href="#">➤ Fee Structure</a>
+          <a href="#">➤ Payments</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle"><i class="fas fa-bed"></i> Hostel <i class="fas fa-chevron-down"></i></div>
+        <div class="dropdown-menu">
+          <a href="#">➤ Assign Hostel</a>
+          <a href="#">➤ Hostel List</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle"><i class="fas fa-chart-bar"></i> Reports <i class="fas fa-chevron-down"></i></div>
+        <div class="dropdown-menu">
+          <a href="#">➤ Student Report</a>
+          <a href="#">➤ Finance Report</a>
+          <a href="#">➤ Placement Report</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="card"><div class="summary">3200 <span>Total Students</span></div></div>
+    <div class="card"><div class="summary">25 <span>Admissions Today</span></div></div>
+    <div class="card"><div class="summary">₹12.5L <span>Pending Fees</span></div></div>
+    
+    <!-- Hostel occupancy pie chart -->
+    <div class="card">
+      <h3>Hostel Occupancy</h3>
+      <canvas id="hostelChart"></canvas>
+    </div>
+
+    <div class="card"><h3>Admissions Trend</h3><canvas id="admissionsChart"></canvas></div>
+    <div class="card"><h3>Attendance Snapshot</h3><canvas id="attendanceChart"></canvas></div>
+    <div class="card"><h3>Faculty Overview</h3><canvas id="facultyChart"></canvas></div>
+    <div class="card"><h3>Placement Stats</h3><canvas id="placementChart"></canvas></div>
+
+    <div class="card">
+      <h3>Recent Admissions</h3>
+      <table>
+        <tr><th>Name</th><th>Course</th><th>Status</th></tr>
+        <tr><td>Aman Sharma</td><td>CSE</td><td>Paid</td></tr>
+        <tr><td>Priya Singh</td><td>ECE</td><td>Pending</td></tr>
+        <tr><td>Rahul Verma</td><td>ME</td><td>Paid</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Events & Notices</h3>
+      <ul class="notice">
+        <li>Workshop on AI — 28th Sept</li>
+        <li>Placement Drive: Infosys — 1st Oct</li>
+        <li>Mid-Sem Exams Start — 5th Oct</li>
+      </ul>
+    </div>
+  </main>
+</div>
+
+<script>
+// Sidebar dropdown toggle
+document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
+  toggle.addEventListener("click", () => {
+    toggle.parentElement.classList.toggle("open");
+  });
+});
+
+// Charts with blue theme
+new Chart(document.getElementById('admissionsChart'), {
+  type: 'line',
+  data: { 
+    labels: ['Jan','Feb','Mar','Apr','May'], 
+    datasets: [{
+      data:[120,90,150,180,140], 
+      borderColor:'#3498db',
+      backgroundColor:'rgba(52,152,219,0.15)',
+      fill:true,
+      tension:0.3
+    }]
+  },
+  options: {plugins:{legend:{display:false}},responsive:true,maintainAspectRatio:false}
+});
+
+new Chart(document.getElementById('attendanceChart'), {
+  type: 'doughnut',
+  data: { 
+    labels:['Present','Absent'], 
+    datasets:[{ 
+      data:[85,15], 
+      backgroundColor:['#3498db','#ffffff'], 
+      borderColor:'#3498db'
+    }]
+  },
+  options: {plugins:{legend:{position:'bottom'}}}
+});
+
+new Chart(document.getElementById('facultyChart'), {
+  type: 'bar',
+  data: { 
+    labels:['CSE','ECE','ME','CE'], 
+    datasets:[{ 
+      data:[20,15,10,8], 
+      backgroundColor:'#3498db' 
+    }]
+  },
+  options: {plugins:{legend:{display:false}}}
+});
+
+new Chart(document.getElementById('placementChart'), {
+  type: 'pie',
+  data: { 
+    labels:['Placed','Internship','Unplaced'], 
+    datasets:[{ 
+      data:[320,100,180], 
+      backgroundColor:['#3498db','#ffffff','#85c1f5'],
+      borderColor:'#3498db'
+    }]
+  },
+  options: {plugins:{legend:{position:'bottom'}}}
+});
+
+// Hostel occupancy chart
+new Chart(document.getElementById('hostelChart'), {
+  type: 'pie',
+  data: {
+    labels: ['Occupied','Vacant'],
+    datasets: [{
+      data: [82,18],
+      backgroundColor: ['#3498db','#ffffff'],
+      borderColor: '#3498db'
+    }]
+  },
+  options: {plugins:{legend:{position:'bottom'}}}
+});
+</script>
+</body>
+</html>
