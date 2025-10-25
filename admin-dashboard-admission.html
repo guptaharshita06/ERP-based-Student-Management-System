@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f8f9fa;--card:#fff;--muted:#6c757d;--text:#2c3e50;--primary:#3498db}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    .topbar{height:64px;background:var(--card);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #e9ecef;position:sticky;top:0;z-index:30}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand i{color:var(--primary)}
+    .layout{display:flex;gap:24px;max-width:1200px;margin:20px auto;padding:0 20px}
+    .sidebar{width:260px;background:var(--card);border:1px solid #e9ecef;border-radius:10px;padding:12px;height:calc(100vh - 120px);position:sticky;top:80px}
+    .nav-link{display:flex;gap:12px;padding:10px;border-radius:8px;color:var(--muted);align-items:center;text-decoration:none}
+    .nav-link.active{background:#eaf6ff;color:var(--primary);font-weight:600}
+    .nav-link:hover{background:#f1f7fb}
+
+    .main{flex:1}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+    .card{background:var(--card);padding:18px;border-radius:12px;border:1px solid #e9ecef}
+    .card h4{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .metric{font-size:28px;font-weight:700}
+
+    .section{display:flex;gap:18px}
+    .wide{flex:2}
+    .narrow{flex:1}
+
+    .list-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;border:1px solid #f0f3f5;margin-bottom:8px}
+    .chip{background:#eaf6ff;padding:6px 8px;border-radius:8px;color:var(--primary);font-weight:600}
+    .chart-placeholder{height:120px;background:repeating-linear-gradient(135deg,#eaf6ff,#eaf6ff 10px,#f8f9fa 10px,#f8f9fa 20px);border-radius:8px;margin:10px 0 0 0;display:flex;align-items:center;justify-content:center;color:#b0b8c1;font-size:15px}
+
+    @media (max-width:1000px){.layout{padding:0 12px}.sidebar{display:none}.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><i class="fas fa-user-shield"></i> Admin Portal</div>
+    <div style="display:flex;gap:12px;align-items:center"><input placeholder="Search students, fees, hostel..." style="padding:8px 10px;border-radius:8px;border:1px solid #e9ecef"/><div class="avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff">A</div></div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav>
+        <a class="nav-link" href="#"><i class="fas fa-home"></i> Dashboard</a>
+        <a class="nav-link active" href="admin-dashboard-admission.html"><i class="fas fa-user-plus"></i> Admissions</a>
+        <a class="nav-link" href="#fees"><i class="fas fa-rupee-sign"></i> Fees</a>
+        <a class="nav-link" href="hostel.html"><i class="fas fa-bed"></i> Hostel</a>
+        <a class="nav-link" href="#reports"><i class="fas fa-chart-bar"></i> Reports</a>
+      </nav>
+    </aside>
+    </div>
+    </body>
+    </html>
