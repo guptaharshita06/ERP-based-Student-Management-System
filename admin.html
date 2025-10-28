@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f9fa; --card:#fff; --muted:#6c757d; --text:#2c3e50; --primary:#3498db;
+  --sidebar-collapsed:70px; --sidebar-expanded:260px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* Topbar */
+.topbar{
+  height:64px; background:var(--card); display:flex; align-items:center; justify-content:space-between;
+  padding:0 12px; border-bottom:1px solid #e9ecef; position:sticky; top:0; z-index:50;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.brand i{color:var(--primary)}
+.menu-toggle{font-size:20px; cursor:pointer; margin-right:12px}
+
+/* Layout */
+.layout{
+  display:flex;
+  max-width:1200px;
+  margin:20px auto;
+  transition: all 0.3s ease;
+}
+
+/* Sidebar */
+.sidebar{
+  flex-shrink:0;
+  width:var(--sidebar-collapsed);
+  background:var(--card);
+  border-radius:0 12px 12px 0;
+  border:1px solid #e9ecef;
+  padding:12px;
+  overflow:hidden;
+  transition: width 0.3s ease;
+}
+.sidebar.open{width:var(--sidebar-expanded)}
+
+.nav-link{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:var(--muted);text-decoration:none;white-space:nowrap;}
+.nav-link i:first-child{font-size:18px}
+.nav-link span{display:none}
+.sidebar.open .nav-link span{display:inline}
+
+/* Hide arrows when sidebar is collapsed */
+.sidebar:not(.open) .nav-link i.fas.fa-chevron-down { display: none; }
+.sidebar.open .nav-link i.fas.fa-chevron-down { display: inline; }
+
+.nav-link.active{background:#eaf6ff;color:var(--primary);font-weight:600}
+.nav-link:hover{background:#f1f7fb}
+
+/* Dropdown */
+.dropdown {margin-bottom:6px;}
+.dropdown-menu {
+  display:none; flex-direction:column; margin-left:34px; margin-top:4px;
+}
+.dropdown-menu a {
+  font-size:14px; padding:6px 8px; border-radius:6px; color:var(--muted); text-decoration:none;
+}
+.dropdown-menu a:hover { background:#f1f7fb; color:var(--primary); }
+.dropdown.open .dropdown-menu {display:flex;}
+.dropdown-toggle {cursor:pointer; display:flex;align-items:center;justify-content:space-between;}
+
+/* Main Content */
+.main{flex:1; transition: margin-left 0.3s ease; min-width:0; padding-left:12px;}
+.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid #e9ecef;margin-bottom:18px}
+.card h4{font-size:14px;color:var(--muted);margin-bottom:10px}
+.metric{font-size:28px;font-weight:700}
+.chart-placeholder{height:120px;background:repeating-linear-gradient(135deg,#eaf6ff,#eaf6ff 10px,#f8f9fa 10px,#f8f9fa 20px);border-radius:8px;margin:10px 0 0 0;display:flex;align-items:center;justify-content:center;color:#b0b8c1;font-size:15px}
+
+/* Responsive */
+@media (max-width:900px){
+  .sidebar{position:fixed;top:64px;left:0;height:calc(100% - 64px);display:none; z-index:1000;}
+  .sidebar.open{display:block;}
+  .main{margin-left:0; padding:0 12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <i class="fas fa-bars menu-toggle" onclick="toggleSidebar()"></i>
+    <div class="brand"><i class="fas fa-user-shield"></i> Admin Portal</div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <input placeholder="Search students, fees, hostel..." style="padding:8px 10px;border-radius:8px;border:1px solid #e9ecef"/>
+    <div class="avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2a8acc);display:flex;align-items:center;justify-content:center;color:#fff">A</div>
+  </div>
+</header>
+
+<!-- Layout -->
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav>
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle">
+          <i class="fas fa-home"></i> <span>Dashboard</span> <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <a href="admin-dashboard.html">➤ Overview</a>
+          <a href="dashboard-stats.html">➤ Today’s Stats</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle">
+          <i class="fas fa-user-plus"></i> <span>Admissions</span> <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <a href="form1.php">➤ Add Admission</a>
+          <a href="show.php">➤ View Admissions</a>
+          
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle">
+          <i class="fas fa-rupee-sign"></i> <span>Fees</span> <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <a href="collect-fee.html">➤ Collect Fee</a>
+          <a href="fee-status.html">➤ Fee Status</a>
+          <a href="fee-report.html">➤ Fee Report</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle">
+          <i class="fas fa-bed"></i> <span>Hostel</span> <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <a href="assign-hostel.html">➤ Assign Hostel</a>
+          <a href="hostel-list.html">➤ Hostel List</a>
+          <a href="hostel-report.html">➤ Hostel Report</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <div class="nav-link dropdown-toggle">
+          <i class="fas fa-chart-bar"></i> <span>Reports</span> <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <a href="student-report.html">➤ Student Report</a>
+          <a href="finance-report.html">➤ Finance Report</a>
+          <a href="hostel-report.html">➤ Hostel Report</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="card">
+      <h4>Admissions Trend</h4>
+      <div class="chart-placeholder">[Admissions Chart]</div>
+    </div>
+    <div class="card">
+      <h4>Recent Admissions</h4>
+      <div id="recentAdmissions"></div>
+    </div>
+    <div class="card">
+      <h4>Hostel Overview</h4>
+      <div class="chart-placeholder">[Hostel Chart]</div>
+    </div>
+  </main>
+</div>
+
+<script>
+// Sidebar toggle
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Dropdown toggle
+document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
+  toggle.addEventListener("click", () => {
+    const parent = toggle.parentElement;
+    parent.classList.toggle("open");
+  });
+});
+
+// Active state
+document.querySelectorAll('.nav-link').forEach(a => {
+  a.addEventListener('click', e => {
+    if (!a.classList.contains("dropdown-toggle")) {
+      document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+    }
+  });
+});
+
+// Example recent admissions
+async function loadRecentAdmissions() {
+  try {
+    const res = await fetch("http://localhost:5000/admission32");
+    const admissions = await res.json();
+    const container = document.getElementById("recentAdmissions");
+    container.innerHTML = "";
+    admissions.slice(0, 3).forEach(adm => {
+      container.innerHTML += `
+        <div style="padding:10px;border-bottom:1px solid #eee">
+          <strong>${adm.student_name}</strong>
+          <div style="color:var(--muted);font-size:13px">${adm.course} • ${adm.fee_status}</div>
+        </div>`;
+    });
+  } catch (err) { console.error(err); }
+}
+loadRecentAdmissions();
+</script>
+
+</body>
+</html>
