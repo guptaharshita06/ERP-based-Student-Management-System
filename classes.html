@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Classes</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --text: #34495e;
+      --muted: #95a5a6;
+      --primary: #3498db;
+      --primary-light: #eaf5fc;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --border-color: #eef2f7;
+      --spacing: 24px;
+      --card-radius: 16px;
+      --button-radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* Header */
+    .topbar {
+      height:70px;
+      background:var(--card);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 var(--spacing);
+      border-bottom:1px solid var(--border-color);
+      position:sticky;
+      top:0;
+      z-index:300;
+    }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:20px; }
+    .brand i { color: var(--primary); }
+    .top-actions { display:flex; gap:16px; align-items:center; }
+    .avatar { width:40px; height:40px; border-radius:50%; background: var(--primary); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600; }
+
+    /* Sidebar */
+    .sidebar { 
+      width: 260px; 
+      background: var(--card); 
+      border:1px solid var(--border-color); 
+      border-radius:var(--card-radius); 
+      padding:16px; 
+      height:calc(100vh - 70px); 
+      position:fixed; 
+      top:70px; 
+      left:-260px; /* hidden by default */
+      transition:left 0.3s ease; 
+      z-index:200; 
+    }
+    .nav-link { display:flex; gap:12px; padding:12px; border-radius: var(--button-radius); color: var(--muted); align-items:center; text-decoration:none; font-weight:500; transition:all 0.2s ease; }
+    .nav-link i { width:20px; text-align:center; }
+    .nav-link.active { background: var(--primary-light); color: var(--primary); font-weight:600; }
+    .nav-link:hover { background: var(--primary-light); color: var(--primary); }
+
+    /* Main Content */
+    .layout { display:flex; gap:var(--spacing); max-width:1400px; margin:var(--spacing) auto; padding:0 var(--spacing); }
+    .main { flex:1; margin-left:0; transition: margin-left 0.3s ease; }
+
+    .card { background: var(--card); padding: var(--spacing); border-radius: var(--card-radius); border:1px solid var(--border-color); box-shadow: 0 4px 30px rgba(0,0,0,0.05); margin-bottom: var(--spacing); }
+
+    /* Table */
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:12px; border:1px solid var(--border-color); text-align:left; }
+    th { background: var(--primary-light); }
+
+    /* Buttons */
+    .btn { padding: 10px 16px; border-radius: var(--button-radius); text-decoration:none; font-weight:600; display:inline-block; transition: all 0.2s ease; border:none; cursor:pointer; }
+    .btn-primary { background-color: var(--primary); color:#fff; }
+    .btn-primary:hover { background-color:#2980b9; transform:scale(1.05); }
+
+    /* Responsive Sidebar */
+    @media (min-width: 769px) {
+      .sidebar.active { left:0; }
+      .main.shift { margin-left: 260px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { width:100%; height:100vh; left:-100%; top:0; border-radius:0; }
+      .sidebar.active { left:0; }
+      .main { margin-left:0; }
+      /* Optional: overlay background */
+      .overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:150; }
+      .overlay.active { display:block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand"><i class="fas fa-graduation-cap"></i> <span>College Portal</span></div>
+    <div class="top-actions">
+      <button id="sidebarToggle" class="btn btn-primary"><i class="fas fa-bars"></i></button>
+      <div class="small">Welcome, Student</div>
+      <div class="avatar">S</div>
+    </div>
+  </header>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay"></div>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav>
+        <a class="nav-link" href="student.html"><i class="fas fa-home"></i> Dashboard</a>
+        <a class="nav-link active" href="#"><i class="fas fa-chalkboard"></i> Classes</a>
+        <a class="nav-link" href="assignments.html"><i class="fas fa-clipboard-list"></i> Assignments</a>
+        <a class="nav-link" href="student.html#results"><i class="fas fa-chart-line"></i> Results</a>
+        <a class="nav-link" href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+        <a class="nav-link" href="exam.html"><i class="fas fa-file-alt"></i> Exams</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="card">
+        <h2>📚 Classes Timetable</h2>
+
+        <div style="margin-top:16px; display:flex; align-items:center; gap:12px;">
+          <label for="daySelect" class="font-bold">Select Day:</label>
+          <select id="daySelect" class="btn" style="padding:6px 10px; border:1px solid var(--border-color);">
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="friday">Friday</option>
+          </select>
+        </div>
+
+        <div id="timetable" style="margin-top:20px; overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Course</th>
+                <th>Room</th>
+                <th>Instructor</th>
+              </tr>
+            </thead>
+            <tbody id="timetableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const mainContent = document.querySelector('.main');
+    const overlay = document.getElementById('overlay');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+
+      if(window.innerWidth > 768){
+        mainContent.classList.toggle('shift');
+      }
+    });
+
+    // Close sidebar on overlay click (mobile)
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+    });
+
+    // Close sidebar on mobile nav link click
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if(window.innerWidth <= 768){
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        }
+      });
+    });
+
+    // Timetable data
+    const timetableData = {
+      monday: [
+        { time: "09:00 - 10:00", course: "Math 101", room: "R101", instructor: "Dr. Smith" },
+        { time: "10:15 - 11:15", course: "Physics 102", room: "R102", instructor: "Dr. Johnson" },
+        { time: "11:30 - 12:30", course: "Chemistry 203", room: "R103", instructor: "Dr. Lee" }
+      ],
+      tuesday: [
+        { time: "09:00 - 10:00", course: "Computer Sci 201", room: "R201", instructor: "Prof. Allen" },
+        { time: "10:15 - 11:15", course: "English 101", room: "R202", instructor: "Dr. Baker" },
+        { time: "11:30 - 12:30", course: "History 110", room: "R203", instructor: "Dr. Clark" }
+      ],
+      wednesday: [
+        { time: "09:00 - 10:00", course: "Math 101", room: "R101", instructor: "Dr. Smith" },
+        { time: "10:15 - 11:15", course: "Biology 102", room: "R104", instructor: "Dr. Green" },
+        { time: "11:30 - 12:30", course: "Philosophy 310", room: "R105", instructor: "Dr. White" }
+      ],
+      thursday: [
+        { time: "09:00 - 10:00", course: "Physics Lab", room: "Lab 1", instructor: "Dr. Johnson" },
+        { time: "10:15 - 11:15", course: "Chemistry Lab", room: "Lab 2", instructor: "Dr. Lee" },
+        { time: "11:30 - 12:30", course: "AI Workshop", room: "R106", instructor: "Prof. Kim" }
+      ],
+      friday: [
+        { time: "09:00 - 10:00", course: "Computer Sci 201", room: "R201", instructor: "Prof. Allen" },
+        { time: "10:15 - 11:15", course: "English 101", room: "R202", instructor: "Dr. Baker" },
+        { time: "11:30 - 12:30", course: "Sports / Gym", room: "Gym", instructor: "Coach Ray" }
+      ],
+      saturday: [
+        { time: "09:00 - 10:00", course: "Computer Sci 201", room: "R201", instructor: "Prof. Allen" },
+        { time: "10:15 - 11:15", course: "English 101", room: "R202", instructor: "Dr. Baker" },
+        { time: "11:30 - 12:30", course: "Sports / Gym", room: "Gym", instructor: "Coach Ray" }
+      ]
+    };
+
+    const daySelect = document.getElementById("daySelect");
+    const timetableBody = document.getElementById("timetableBody");
+
+    function renderTimetable(day) {
+      timetableBody.innerHTML = "";
+      timetableData[day].forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.time}</td>
+          <td>${item.course}</td>
+          <td>${item.room}</td>
+          <td>${item.instructor}</td>
+        `;
+        timetableBody.appendChild(tr);
+      });
+    }
+
+    renderTimetable(daySelect.value);
+    daySelect.addEventListener("change", (e) => renderTimetable(e.target.value));
+  </script>
+
+</body>
+</html>
