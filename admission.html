@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Academics — Student Details</title>
+  <style>
+    :root{--bg:#f6f9fc;--card:#ffffff;--muted:#6b7280;--accent:#0f62fe}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); margin:0; color:#0f1724}
+    .container{max-width:940px;margin:28px auto;padding:20px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 24px rgba(15,23,36,0.06);padding:24px}
+    h1{font-size:20px;margin:0 0 6px}
+    p.lead{color:var(--muted);margin:0 0 18px}
+    .section-title{display:flex;align-items:center;gap:12px;margin:18px 0 8px}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    .hint{font-size:13px;color:var(--muted);margin-top:6px}
+    input[type=text], input[type=email], input[type=date], select, textarea{width:100%;padding:10px 12px;border:1px solid #e6e9ef;border-radius:8px;font-size:14px}
+    textarea{min-height:80px;resize:vertical}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .full{grid-column:1/-1}
+    .actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
+    button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    button.secondary{background:#eef2ff;color:#072bff}
+    .small{font-size:13px;color:var(--muted)}
+    .file-list{margin-top:8px;font-size:13px}
+    .steps{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+    .step{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #eef2ff;font-size:13px}
+    .required{color:#d32f2f;margin-left:6px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <h1>Student Academic & Admission Details — <span id="collegeName">[College Name]</span></h1>
+          <p class="lead">This form collects essential academic and admission information to create your student profile on the college portal. Your data will be kept confidential.</p>
+        </div>
+        <div class="steps" aria-hidden>
+          <div class="step">Identity</div>
+          <div class="step">Admission</div>
+          <div class="step">Academic</div>
+          <div class="step">Parents</div>
+          <div class="step">Medical</div>
+          <div class="step">Documents</div>
+        </div>
+      </div>
+
+      <form id="academicsForm" novalidate>
+        <input type="hidden" name="timestamp" id="timestamp">
+
+        <!-- Privacy note -->
+        <p class="small">Privacy note: By submitting this form you consent to the college storing and using this information for administrative and academic purposes only. Contact: <a href="mailto:admissions@[college].edu">admissions@[college].edu</a></p>
+
+        <!-- Section 1 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 1 — Identity & Contact</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="fullName">Full name <span class="required">*</span></label>
+              <input id="fullName" name="fullName" type="text" required placeholder="First Middle Last" />
+              <div class="hint">As per admission records</div>
+            </div>
+
+            <div>
+              <label for="gender">Gender <span class="required">*</span></label>
+              <select id="gender" name="gender" required>
+                <option value="">Select</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Non-binary</option>
+                <option>Prefer not to say</option>
+                <option>Other (please specify)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dob">Date of birth <span class="required">*</span></label>
+              <input id="dob" name="dob" type="date" required />
+            </div>
+
+            <div>
+              <label for="photo">Student photograph</label>
+              <input id="photo" name="photo" type="file" accept="image/png,image/jpeg" />
+              <div class="hint">Allowed: JPG/PNG. Max 2 MB.</div>
+            </div>
+
+            <div>
+              <label for="email">Personal email address <span class="required">*</span></label>
+              <input id="email" name="email" type="email" required placeholder="you@example.com" />
+            </div>
+
+            <div>
+              <label for="mobile">Mobile number <span class="required">*</span></label>
+              <input id="mobile" name="mobile" type="text" required pattern="\d{10,15}" placeholder="Digits only, 10-15 chars" />
+              <div class="hint">Digits only. Example: 9876543210</div>
+            </div>
+
+            <div class="full">
+              <label for="permAddress">Permanent address <span class="required">*</span></label>
+              <textarea id="permAddress" name="permAddress" required placeholder="Street, City, State, Pincode"></textarea>
+            </div>
+
+            <div class="full">
+              <label for="corrAddress">Correspondence address (if different)</label>
+              <textarea id="corrAddress" name="corrAddress" placeholder="Leave blank if same as permanent address"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 2 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 2 — Admission Details</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="admissionNo">Admission number / Application ID <span class="required">*</span></label>
+              <input id="admissionNo" name="admissionNo" type="text" required />
+            </div>
+
+            <div>
+              <label for="program">Program / Course enrolled <span class="required">*</span></label>
+              <select id="program" name="program" required>
+                <option value="">Select program</option>
+                <option>B.Tech - Civil</option>
+                <option>B.Tech - CSE</option>
+                <option>B.Tech - ECE</option>
+                <option>B.Sc</option>
+                <option>BBA</option>
+                <option>MBA</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="department">Department / Branch <span class="required">*</span></label>
+              <input id="department" name="department" type="text" required />
+            </div>
+
+            <div>
+              <label for="yearAdmission">Year / Semester of admission <span class="required">*</span></label>
+              <input id="yearAdmission" name="yearAdmission" type="text" required placeholder="e.g., 2025 - First Year" />
+            </div>
+
+            <div>
+              <label for="modeAdmission">Mode of admission <span class="required">*</span></label>
+              <select id="modeAdmission" name="modeAdmission" required>
+                <option value="">Select</option>
+                <option>Regular</option>
+                <option>Lateral Entry</option>
+                <option>Transfer</option>
+                <option>Management Quota</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="category">Admission category <span class="required">*</span></label>
+              <select id="category" name="category" required>
+                <option value="">Select</option>
+                <option>General</option>
+                <option>OBC</option>
+                <option>SC</option>
+                <option>ST</option>
+                <option>EWS</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dateAdmission">Date of admission / enrollment <span class="required">*</span></label>
+              <input id="dateAdmission" name="dateAdmission" type="date" required />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 3 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 3 — Academic History</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="lastInst">Name of last institution attended <span class="required">*</span></label>
+              <input id="lastInst" name="lastInst" type="text" required />
+            </div>
+
+            <div>
+              <label for="board">Board / University <span class="required">*</span></label>
+              <input id="board" name="board" type="text" required />
+            </div>
+
+            <div>
+              <label for="yearPass">Year of passing <span class="required">*</span></label>
+              <input id="yearPass" name="yearPass" type="text" required placeholder="e.g., 2024" />
+            </div>
+
+            <div>
+              <label for="marks">Marks / Percentage (or CGPA) <span class="required">*</span></label>
+              <input id="marks" name="marks" type="text" required placeholder="e.g., 78.4 or 8.2/10" />
+              <div class="hint">Specify scale if CGPA.</div>
+            </div>
+
+            <div class="full">
+              <label for="subjects">Subjects / Specialization (if applicable)</label>
+              <textarea id="subjects" name="subjects" placeholder="Optional"></textarea>
+            </div>
+
+            <div class="full">
+              <label for="entrance">Entrance exam details (if applicable)</label>
+              <textarea id="entrance" name="entrance" placeholder="e.g., JEE Main - Rank 12345"></textarea>
+            </div>
+
+            <div class="full">
+              <label for="scholar">Any scholarships or awards</label>
+              <textarea id="scholar" name="scholar" placeholder="Optional"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 4 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 4 — Current Enrollment & Academics</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="rollNo">Current roll number (if assigned)</label>
+              <input id="rollNo" name="rollNo" type="text" />
+            </div>
+
+            <div>
+              <label for="currSem">Current semester <span class="required">*</span></label>
+              <select id="currSem" name="currSem" required>
+                <option value="">Select</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="currGPA">Current GPA / Semester percentage</label>
+              <input id="currGPA" name="currGPA" type="text" />
+            </div>
+
+            <div>
+              <label for="advisor">Current academic advisor / mentor (if assigned)</label>
+              <input id="advisor" name="advisor" type="text" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 5 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 5 — Parent / Guardian Details</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="father">Father/Guardian name <span class="required">*</span></label>
+              <input id="father" name="father" type="text" required />
+            </div>
+
+            <div>
+              <label for="occupation">Occupation</label>
+              <input id="occupation" name="occupation" type="text" />
+            </div>
+
+            <div>
+              <label for="mother">Mother's name <span class="required">*</span></label>
+              <input id="mother" name="mother" type="text" required />
+            </div>
+
+            <div>
+              <label for="parentPhone">Parent/Guardian contact number <span class="required">*</span></label>
+              <input id="parentPhone" name="parentPhone" type="text" required pattern="\d{10,15}" />
+            </div>
+
+            <div>
+              <label for="parentEmail">Parent/Guardian email</label>
+              <input id="parentEmail" name="parentEmail" type="email" />
+            </div>
+
+            <div class="full">
+              <label for="parentAddr">Address (if different from student)</label>
+              <textarea id="parentAddr" name="parentAddr"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 6 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 6 — Emergency Contact</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="emName">Emergency contact name <span class="required">*</span></label>
+              <input id="emName" name="emName" type="text" required />
+            </div>
+
+            <div>
+              <label for="emRel">Relationship <span class="required">*</span></label>
+              <input id="emRel" name="emRel" type="text" required />
+            </div>
+
+            <div>
+              <label for="emPhone">Emergency phone number <span class="required">*</span></label>
+              <input id="emPhone" name="emPhone" type="text" required pattern="\d{10,15}" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 7 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 7 — Medical & Accessibility</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="blood">Blood group</label>
+              <select id="blood" name="blood">
+                <option value="">Select</option>
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+                <option>O+</option>
+                <option>O-</option>
+                <option>Unknown</option>
+              </select>
+            </div>
+
+            <div class="full">
+              <label for="medical">Medical conditions / allergies</label>
+              <textarea id="medical" name="medical" placeholder="List any medical conditions or allergies"></textarea>
+            </div>
+
+            <div>
+              <label>Disability / special accommodation required</label>
+              <div style="display:flex;gap:12px;align-items:center">
+                <label><input type="radio" name="disability" value="No" checked> No</label>
+                <label><input type="radio" name="disability" value="Yes"> Yes</label>
+              </div>
+            </div>
+
+            <div class="full">
+              <label for="accom">If yes, describe accommodations required</label>
+              <textarea id="accom" name="accom"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 8 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 8 — Documents Checklist</strong></legend>
+          <div class="grid">
+            <div class="full">
+              <label for="docs">Upload scanned documents</label>
+              <input id="docs" name="docs" type="file" accept="application/pdf,image/*" multiple />
+              <div class="hint">Suggested: Admission proof, mark sheets, ID proof, passport-size photo. Max 10 MB per file (server-side enforcement recommended).</div>
+              <div id="fileList" class="file-list"></div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 9 -->
+        <fieldset>
+          <legend class="section-title"><strong>Section 9 — Declaration & Consent</strong></legend>
+          <div>
+            <label><input id="declaration" name="declaration" type="checkbox" required> I hereby declare that the information provided above is true and correct to the best of my knowledge. I understand that any false information may lead to disciplinary action.</label>
+            <div style="height:8px"></div>
+            <label><input id="consent" name="consent" type="checkbox" required> I consent to the college storing and processing my personal and academic data for legitimate institutional purposes.</label>
+          </div>
+        </fieldset>
+
+        <!-- Final -->
+        <fieldset>
+          <legend class="section-title"><strong>Confirmation & Feedback</strong></legend>
+          <div class="grid">
+            <div>
+              <label for="ref">How did you hear about [College Name]?</label>
+              <select id="ref" name="ref">
+                <option value="">Select</option>
+                <option>Website</option>
+                <option>Social media</option>
+                <option>Referral</option>
+                <option>School counselor</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="full">
+              <label for="notes">Any suggestions or notes</label>
+              <textarea id="notes" name="notes"></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="reset" class="secondary">Reset</button>
+            <button type="submit">Submit</button>
+          </div>
+
+          <p class="small" style="margin-top:12px">Confirmation: After submission, documents will be verified within 5–7 working days. For queries contact admissions@[college].edu</p>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // small client-side helpers
+    document.getElementById('timestamp').value = new Date().toISOString();
+
+    // file list preview
+    const docs = document.getElementById('docs');
+    const fileList = document.getElementById('fileList');
+    docs && docs.addEventListener('change', (e)=>{
+      fileList.innerHTML = '';
+      Array.from(e.target.files).forEach((f, i)=>{
+        const item = document.createElement('div');
+        item.textContent = `${i+1}. ${f.name} (${Math.round(f.size/1024)} KB)`;
+        fileList.appendChild(item);
+      });
+    });
+
+    // basic validation and submission handling
+    const form = document.getElementById('academicsForm');
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      // built-in validity
+      if(!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+
+      // collect form data
+      const fd = new FormData(form);
+
+      // Example: show collected data in console and show success message.
+      // NOTE: Replace the fetch URL with your backend endpoint to store responses / files.
+      console.log('FormData entries:');
+      for(const pair of fd.entries()){
+        console.log(pair[0], pair[1]);
+      }
+
+      // Show a friendly confirmation to the user
+      alert('Thank you — your response has been recorded. If you uploaded documents, they will be verified within 5–7 working days.');
+
+      // Optionally reset or redirect
+      // form.reset();
+    });
+  </script>
+</body>
+</html>
